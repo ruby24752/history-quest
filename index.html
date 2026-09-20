@@ -9,22 +9,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#ffffff;
-  --bg-off:#e8e8ec;
-  --bg-2:#f7f7f8;
-  --surface:#f0f0f2;
-  --line:#e8e8ec;
-  --line-strong:#c0c0c0;
-  --text:#1a1a1a;
-  --text-2:#5c5c5c;
-  --text-3:#8b8b8b;
-  --accent:#4B3FE3;
-  --accent-2:#3a2fb8;
-  --accent-soft:rgba(75,63,227,.10);
-  --accent-bright:#7B71FF;
-  --bad:#e5484d;
-  --bad-soft:#fdeceb;
-  --bad-deep:#b42318;
+  --bg:#f3e8cf;
+  --bg-off:#e6d5b0;
+  --bg-2:#ece0c2;
+  --surface:#e2d0a8;
+  --line:#d2bc92;
+  --line-strong:#b39a6e;
+  --text:#33281a;
+  --text-2:#5c4d38;
+  --text-3:#8a7a5e;
+  --accent:#a83a2e;
+  --accent-2:#8a2e24;
+  --accent-soft:rgba(168,58,46,.12);
+  --accent-bright:#c45a4a;
+  --bad:#9e3b30;
+  --bad-soft:#eed2c6;
+  --bad-deep:#7a2a20;
   --sans:"Inter","Noto Sans SC","PingFang SC","Hiragino Sans GB",sans-serif;
   --mono:"JetBrains Mono","SF Mono","Cascadia Code",monospace;
 }
@@ -60,7 +60,7 @@ body{
 .app::after{
   content:'';position:absolute;width:70vw;height:70vw;border-radius:50%;
   top:-30vw;right:-18vw;pointer-events:none;z-index:0;
-  background:radial-gradient(circle,rgba(75,63,227,.10),transparent 62%);
+  background:radial-gradient(circle,rgba(168,58,46,.08),transparent 62%);
 }
 
 /* ============ TOP BAR ============ */
@@ -176,7 +176,7 @@ body{
 .qcard{
   position:relative;
   border:1px solid var(--line);border-radius:18px;
-  background:linear-gradient(180deg,#ffffff 0%,var(--bg-2) 100%);
+  background:linear-gradient(180deg,#f7eed8 0%,var(--bg-2) 100%);
   padding:clamp(18px,3.2vh,34px) clamp(20px,2.8vw,40px);
   overflow:hidden;
 }
@@ -201,7 +201,7 @@ body{
   display:flex;align-items:center;gap:14px;
   padding:clamp(13px,2.1vh,20px) clamp(14px,1.8vw,22px);
   border:1px solid var(--line);border-radius:14px;
-  background:#fff;color:var(--text);
+  background:#f7eed8;color:var(--text);
   font-family:var(--sans);font-size:clamp(14px,1.42vw,18px);font-weight:500;
   text-align:left;cursor:pointer;
   transition:all .2s cubic-bezier(.2,.8,.2,1);
