@@ -44,28 +44,6 @@ img {
   user-drag: none !important;
 }
 
-/* 二维码水印 */
-.qr-watermark {
-  position: fixed;
-  top: 60px;
-  right: 12px;
-  width: 60px;
-  height: 60px;
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.1);
-  z-index: 9999;
-  overflow: hidden;
-}
-.qr-watermark img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center bottom;
-  background: #fff;
-}
 html,body{width:100%;height:100%;overflow:hidden;}
 body{
   background:var(--bg);
@@ -387,11 +365,6 @@ body{
 
 </head>
 <body>
-<!-- 二维码水印 -->
-<div class="qr-watermark">
-  <img src="https://aka.doubaocdn.com/s/Oz5hx9t2Gy" alt="扫码获取更多资料">
-</div>
-
 <div class="app">
 
   <header class="topbar">
