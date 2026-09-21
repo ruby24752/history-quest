@@ -627,7 +627,7 @@ function renderLessons(){
     div.innerHTML = `
       <div class="lesson-num">${idx+1}</div>
       <div class="lesson-info">
-        <div class="lesson-title">${lesson.name.split(" · ")[1]}</div>
+        <div class="lesson-title">${lesson.name}</div>
         <div class="lesson-meta">共${lesson.count}题 · 每次随机${Math.min(TOTAL_Q, lesson.count)}题</div>
       </div>
       <div class="lesson-arrow">→</div>
