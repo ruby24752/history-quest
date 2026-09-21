@@ -1034,7 +1034,15 @@ function getLessons(){
     if(!lessonSet[q.tag]) lessonSet[q.tag] = 0;
     lessonSet[q.tag]++;
   });
-  return Object.entries(lessonSet).map(([name, count])=>({name, count}));
+  // 按课号数字排序
+  return Object.entries(lessonSet)
+    .map(([name, count])=>({name, count}))
+    .sort((a,b)=>{
+      // 提取课号数字
+      const numA = parseInt(a.name.match(/第(\d+)课/)[1]);
+      const numB = parseInt(b.name.match(/第(\d+)课/)[1]);
+      return numA - numB;
+    });
 }
 
 // 渲染课程列表
