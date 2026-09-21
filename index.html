@@ -3,1066 +3,813 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>历史闯关 · Prehistoric China Quest</title>
+<title>历史闯关 · 七年级上册</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f3e8cf;
-  --bg-off:#e6d5b0;
-  --bg-2:#ece0c2;
-  --surface:#e2d0a8;
-  --line:#d2bc92;
-  --line-strong:#b39a6e;
-  --text:#33281a;
-  --text-2:#5c4d38;
-  --text-3:#8a7a5e;
-  --accent:#a83a2e;
-  --accent-2:#8a2e24;
-  --accent-soft:rgba(168,58,46,.12);
-  --accent-bright:#c45a4a;
-  --bad:#9e3b30;
-  --bad-soft:#eed2c6;
-  --bad-deep:#7a2a20;
-  --sans:"Inter","Noto Sans SC","PingFang SC","Hiragino Sans GB",sans-serif;
-  --mono:"JetBrains Mono","SF Mono","Cascadia Code",monospace;
+  --bg:#f5ecd7;
+  --bg-deep:#e8d9b8;
+  --surface:#fff8e7;
+  --line:#d4b88a;
+  --text:#3a2e1f;
+  --text-2:#6b5a42;
+  --accent:#9a3b2e;
+  --accent-2:#7a2a20;
+  --gold:#b8860b;
+  --green:#4a7c59;
+  --shadow:0 4px 20px rgba(139,90,43,.12);
 }
-
-*{box-sizing:border-box;margin:0;padding:0;}
-
-/* 防复制样式 */
-* {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-  -webkit-touch-callout: none !important;
-}
-img {
-  -webkit-user-drag: none !important;
-  user-drag: none !important;
-}
-
-html,body{width:100%;height:100%;overflow:hidden;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
 body{
+  font-family:"Noto Sans SC",sans-serif;
   background:var(--bg);
   color:var(--text);
-  font-family:var(--sans);
-  -webkit-font-smoothing:antialiased;
-  font-feature-settings:"ss01","cv11";
+  min-height:100vh;
+  padding:16px;
+  position:relative;
+  overflow-x:hidden;
 }
-
-/* ============ APP SHELL ============ */
-.app{
-  position:fixed;top:0;left:0;right:0;bottom:0;height:100svh;
-  display:flex;flex-direction:column;
-  padding:clamp(16px,3.4vh,34px) clamp(22px,5.4vw,78px);
-  background:var(--bg);
-  overflow:hidden;
-}
-.app::before{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+/* 历史纹样背景 */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
   background-image:
-    linear-gradient(to right,var(--line) 1px,transparent 1px),
-    linear-gradient(to bottom,var(--line) 1px,transparent 1px);
-  background-size:88px 88px;
-  -webkit-mask-image:radial-gradient(130% 105% at 50% 0%,#000 0%,transparent 72%);
-  mask-image:radial-gradient(130% 105% at 50% 0%,#000 0%,transparent 72%);
-  opacity:.72;
+    radial-gradient(circle at 20% 20%, rgba(154,59,46,.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(184,134,11,.04) 0%, transparent 50%);
+  pointer-events:none;
+  z-index:0;
 }
-.app::after{
-  content:'';position:absolute;width:70vw;height:70vw;border-radius:50%;
-  top:-30vw;right:-18vw;pointer-events:none;z-index:0;
-  background:radial-gradient(circle,rgba(168,58,46,.08),transparent 62%);
+/* 青铜纹装饰 */
+body::after{
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;
+  height:8px;
+  background:repeating-linear-gradient(90deg,
+    var(--accent) 0px, var(--accent) 20px,
+    var(--gold) 20px, var(--gold) 40px);
+  opacity:.3;
+  z-index:100;
+}
+.page{display:none;position:relative;z-index:1;}
+.page.active{display:block;}
+
+/* 标题 */
+.header{
+  text-align:center;
+  padding:30px 20px 20px;
+}
+.header h1{
+  font-family:"Noto Serif SC",serif;
+  font-size:32px;
+  color:var(--accent);
+  margin-bottom:8px;
+  letter-spacing:4px;
+}
+.header .seal{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  padding:2px 12px;
+  font-size:12px;
+  border-radius:4px;
+  margin-bottom:12px;
+  letter-spacing:2px;
+}
+.header p{
+  color:var(--text-2);
+  font-size:14px;
+  line-height:1.6;
 }
 
-/* ============ TOP BAR ============ */
-.topbar{
-  position:relative;z-index:6;flex:none;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--mono);font-size:11px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--text-3);
+/* 课程列表 */
+.lesson-grid{
+  max-width:800px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  padding:20px 0;
 }
-.mark{display:inline-flex;align-items:center;gap:10px;color:var(--text-2);}
-.mark .dot{
-  width:8px;height:8px;border-radius:999px;background:var(--accent);
-  box-shadow:0 0 0 4px var(--accent-soft);
-  animation:pulse 2.4s ease-in-out infinite;
+.lesson-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px 20px;
+  cursor:pointer;
+  transition:all .3s;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  box-shadow:var(--shadow);
 }
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 4px var(--accent-soft);}
-  50%{box-shadow:0 0 0 8px rgba(75,63,227,.06);}
+.lesson-card:hover{
+  transform:translateX(8px);
+  border-color:var(--accent);
 }
-
-/* ============ VIEWPORT / SCREENS ============ */
-.viewport{position:relative;flex:1;min-height:0;z-index:5;}
-.screen{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;
-  opacity:0;visibility:hidden;pointer-events:none;
-  transform:translateY(14px);
-  transition:opacity .45s cubic-bezier(.2,.7,.2,1),
-             transform .45s cubic-bezier(.2,.7,.2,1),
-             visibility .45s;
+.lesson-num{
+  width:44px;
+  height:44px;
+  background:var(--accent);
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Noto Serif SC",serif;
+  font-weight:bold;
+  font-size:18px;
+  flex-shrink:0;
 }
-.screen.active{opacity:1;visibility:visible;pointer-events:auto;transform:none;}
-
-/* ============ START SCREEN ============ */
-#scrStart{justify-content:center;}
-.start-inner{max-width:880px;}
-.kicker{
-  font-family:var(--mono);font-size:11px;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--accent);font-weight:500;
-}
-.title{
-  font-weight:900;letter-spacing:-.035em;line-height:1.02;
-  font-size:clamp(40px,6.6vw,86px);
-  margin:clamp(10px,2vh,20px) 0 clamp(6px,1vh,10px);
-}
-.title em{font-style:normal;color:var(--accent);}
-.title-en{
-  font-family:var(--mono);font-size:clamp(10px,1.05vw,13px);
-  letter-spacing:.4em;text-transform:uppercase;color:var(--text-3);
-  margin-bottom:clamp(14px,3vh,30px);
-}
-.lede{
-  font-size:clamp(13px,1.32vw,16px);line-height:1.95;
-  color:var(--text-2);max-width:640px;
-}
-.rules{display:flex;flex-wrap:wrap;gap:10px;margin:clamp(18px,3.4vh,32px) 0 clamp(20px,3.6vh,36px);}
-.rule{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:9px 16px;border:1px solid var(--line);border-radius:999px;
-  background:var(--bg-2);font-size:clamp(11px,1.1vw,13px);color:var(--text-2);
-  transition:all .25s ease;
-}
-.rule:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px);}
-.rule b{font-family:var(--mono);color:var(--accent);font-size:11px;letter-spacing:.06em;}
-
-.unit-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:14px;
-  margin:clamp(18px,3.4vh,28px) 0;
-}
-.unit-card{
-  border:2px solid var(--line);border-radius:16px;
-  overflow:hidden;cursor:pointer;
-  transition:all .25s ease;background:var(--bg-2);
-}
-.unit-card:hover{
-  border-color:var(--accent);transform:translateY(-3px);
-  box-shadow:0 8px 20px rgba(0,0,0,.1);
-}
-.unit-card .unit-img{
-  height:80px;display:grid;place-items:center;
-}
-.unit-card .unit-info{
-  padding:12px;
-}
-.unit-card .unit-info h3{
-  font-size:15px;font-weight:700;color:var(--text);
+.lesson-info{flex:1;}
+.lesson-title{
+  font-size:16px;
+  font-weight:600;
+  color:var(--text);
   margin-bottom:4px;
 }
-.unit-card .unit-info p{
-  font-size:12px;color:var(--text-2);line-height:1.4;
+.lesson-meta{
+  font-size:12px;
+  color:var(--text-2);
+}
+.lesson-arrow{
+  color:var(--line-strong);
+  font-size:20px;
 }
 
-.btn{
-  display:inline-flex;align-items:center;gap:14px;
-  padding:clamp(13px,1.9vh,17px) clamp(20px,2.4vw,28px);
-  border:none;border-radius:12px;
-  background:var(--accent);color:#fff;
-  font-family:var(--sans);font-size:clamp(14px,1.3vw,16px);font-weight:600;
-  cursor:pointer;transition:all .22s cubic-bezier(.2,.8,.2,1);
-  letter-spacing:.02em;
+/* 答题页 */
+.quiz-box{
+  max-width:700px;
+  margin:0 auto;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:var(--shadow);
 }
-.btn em{
-  font-family:var(--mono);font-style:normal;font-size:11px;
-  letter-spacing:.16em;opacity:.72;
+.quiz-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+  gap:8px;
 }
-.btn:hover{background:var(--accent-2);transform:translateY(-2px);box-shadow:0 12px 28px rgba(75,63,227,.30);}
-.btn:active{transform:translateY(0);box-shadow:0 4px 12px rgba(75,63,227,.22);}
-.hint{
-  margin-top:clamp(12px,2vh,20px);
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--text-3);
+.quiz-header .lesson-name{
+  font-size:14px;
+  color:var(--accent);
+  font-weight:600;
 }
-
-/* ============ PLAY SCREEN ============ */
-#scrPlay{justify-content:center;position:relative;}
-.play-inner{
-  width:100%;max-width:1080px;margin:0 auto;
-  display:flex;flex-direction:column;
-  gap:clamp(14px,3vh,30px);
-  justify-content:center;
+.quiz-stats{
+  display:flex;
+  gap:12px;
+  font-size:13px;
+  color:var(--text-2);
 }
-.play-top{
-  display:grid;grid-template-columns:auto 1fr auto;
-  align-items:center;gap:clamp(12px,2vw,22px);
+.quiz-stats span{
+  background:var(--bg-deep);
+  padding:4px 10px;
+  border-radius:12px;
 }
-.pill{
-  font-family:var(--mono);font-size:11px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--text-3);white-space:nowrap;
-}
-.pill b{color:var(--text);font-weight:500;}
-.timebar{
-  height:4px;background:var(--line);border-radius:999px;overflow:hidden;
-}
-.timebar i{
-  display:block;height:100%;width:100%;border-radius:999px;
-  background:var(--accent);
-  transition:width .1s linear,background .3s ease;
-}
-.timebar i.low{background:var(--bad);}
-
-.qcard{
-  position:relative;
-  border:1px solid var(--line);border-radius:18px;
-  background:linear-gradient(180deg,#f7eed8 0%,var(--bg-2) 100%);
-  padding:clamp(18px,3.2vh,34px) clamp(20px,2.8vw,40px);
+.timer-bar{
+  height:6px;
+  background:var(--bg-deep);
+  border-radius:3px;
+  margin-bottom:20px;
   overflow:hidden;
 }
-.qcard::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--accent);border-radius:0 3px 3px 0;
+.timer-fill{
+  height:100%;
+  background:var(--green);
+  border-radius:3px;
+  transition:width .3s linear;
 }
-.qtag{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--accent);margin-bottom:clamp(8px,1.4vh,14px);
-}
-.qtext{
-  font-size:clamp(18px,2.05vw,28px);
-  font-weight:700;line-height:1.55;letter-spacing:-.01em;
-}
-
-.opts{
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:clamp(9px,1.4vh,14px);
-}
-.opt{
-  display:flex;align-items:center;gap:14px;
-  padding:clamp(13px,2.1vh,20px) clamp(14px,1.8vw,22px);
-  border:1px solid var(--line);border-radius:14px;
-  background:#f7eed8;color:var(--text);
-  font-family:var(--sans);font-size:clamp(14px,1.42vw,18px);font-weight:500;
-  text-align:left;cursor:pointer;
-  transition:all .2s cubic-bezier(.2,.8,.2,1);
-  animation:optIn .42s cubic-bezier(.2,.8,.2,1) var(--d,0ms) backwards;
-}
-@keyframes optIn{
-  from{opacity:0;transform:translateY(12px);}
-  to{opacity:1;transform:translateY(0);}
-}
-.opt .key{
-  flex:none;width:30px;height:30px;border-radius:8px;
-  display:grid;place-items:center;
-  background:var(--surface);color:var(--text-2);
-  font-family:var(--mono);font-size:12px;font-weight:700;
-  transition:all .2s ease;
-}
-.opt .val{flex:1;line-height:1.45;}
-.opt:hover:not(:disabled){
-  border-color:var(--accent);background:var(--accent-soft);
-  transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(75,63,227,.10);
-}
-.opt:hover:not(:disabled) .key{background:var(--accent);color:#fff;}
-.opt:disabled{cursor:default;}
-.opt.correct{
-  border-color:var(--accent);background:var(--accent);color:#fff;
-  box-shadow:0 10px 26px rgba(75,63,227,.28);
-}
-.opt.correct .key{background:rgba(255,255,255,.22);color:#fff;}
-.opt.wrong{
-  border-color:var(--bad);background:var(--bad-soft);color:var(--bad-deep);
-}
-.opt.wrong .key{background:var(--bad);color:#fff;}
-
-.play-bottom{
-  display:flex;align-items:center;gap:clamp(20px,4vw,52px);
-  padding-top:clamp(4px,1vh,10px);
-}
-.stat{display:flex;align-items:baseline;gap:10px;}
-.stat .lbl{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--text-3);
-}
-.stat b{
-  font-family:var(--mono);font-weight:700;
-  font-size:clamp(15px,1.5vw,19px);color:var(--text);
-  font-variant-numeric:tabular-nums;
-}
-.stat.lives{margin-left:auto;align-items:center;}
-#statLives{display:inline-flex;gap:6px;}
-#statLives i{
-  width:16px;height:16px;border-radius:5px;
+.timer-fill.warning{
   background:var(--accent);
-  transition:all .3s cubic-bezier(.2,.8,.2,1);
 }
-#statLives i.off{background:var(--line-strong);transform:scale(.82);opacity:.5;}
+.question{
+  font-size:18px;
+  line-height:1.6;
+  margin-bottom:24px;
+  font-weight:600;
+}
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.option{
+  padding:14px 18px;
+  background:var(--bg);
+  border:2px solid var(--line);
+  border-radius:10px;
+  cursor:pointer;
+  transition:all .2s;
+  font-size:15px;
+  line-height:1.5;
+}
+.option:hover{
+  border-color:var(--gold);
+  background:var(--bg-deep);
+}
+.option.right{
+  background:#e8f5e9;
+  border-color:var(--green);
+  color:#2e7d32;
+}
+.option.wrong{
+  background:#ffebee;
+  border-color:var(--accent);
+  color:#c62828;
+}
+.option.disabled{pointer-events:none;}
 
-.pop{
-  position:absolute;left:50%;top:44%;
-  font-family:var(--mono);font-weight:700;
-  font-size:clamp(36px,5.4vw,72px);
-  color:var(--accent);pointer-events:none;z-index:60;
-  animation:popUp .95s cubic-bezier(.2,.8,.2,1) forwards;
+/* 解析面板 */
+.explain-panel{
+  margin-top:20px;
+  padding:16px;
+  background:#fff8e1;
+  border-left:4px solid var(--gold);
+  border-radius:8px;
+  display:none;
 }
-.pop.bad{color:var(--bad);}
-@keyframes popUp{
-  0%{opacity:0;transform:translate(-50%,-20%) scale(.65);}
-  22%{opacity:1;transform:translate(-50%,-50%) scale(1);}
-  100%{opacity:0;transform:translate(-50%,-150%) scale(1.06);}
+.explain-panel.show{display:block;}
+.explain-title{
+  font-weight:600;
+  color:var(--gold);
+  margin-bottom:8px;
+  font-size:14px;
+}
+.explain-text{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--text-2);
+}
+.next-btn{
+  display:block;
+  width:100%;
+  margin-top:16px;
+  padding:14px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:25px;
+  font-size:16px;
+  cursor:pointer;
+  font-family:"Noto Sans SC",sans-serif;
+}
+.next-btn:hover{opacity:.9;}
+
+/* 结果页 */
+.result-box{
+  max-width:500px;
+  margin:0 auto;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:40px 30px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+.result-box h2{
+  font-family:"Noto Serif SC",serif;
+  color:var(--accent);
+  margin-bottom:20px;
+  font-size:28px;
+}
+.result-score{
+  font-size:48px;
+  font-weight:900;
+  color:var(--gold);
+  margin:16px 0;
+}
+.result-msg{
+  color:var(--text-2);
+  line-height:1.8;
+  margin-bottom:24px;
+}
+.result-btns{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.btn{
+  padding:12px 24px;
+  border:none;
+  border-radius:25px;
+  font-size:15px;
+  cursor:pointer;
+  font-family:"Noto Sans SC",sans-serif;
+}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-secondary{background:var(--bg-deep);color:var(--text);}
+
+/* 语音开关 */
+.voice-toggle{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:6px 14px;
+  font-size:12px;
+  cursor:pointer;
+  z-index:200;
+  box-shadow:var(--shadow);
+}
+.voice-toggle.on{background:var(--green);color:#fff;border-color:var(--green);}
+
+.tip{
+  text-align:center;
+  color:var(--text-2);
+  font-size:12px;
+  margin-top:20px;
 }
 
-/* ============ END SCREEN ============ */
-#scrEnd{justify-content:center;}
-.end-inner{max-width:880px;}
-.rank{
-  font-family:var(--mono);font-weight:700;
-  font-size:clamp(60px,9vw,120px);line-height:1;
-  color:var(--accent);letter-spacing:-.04em;
-  margin:clamp(8px,1.6vh,18px) 0 clamp(4px,1vh,10px);
-  animation:rankIn .7s cubic-bezier(.2,.9,.2,1) both;
-}
-@keyframes rankIn{
-  from{opacity:0;transform:translateY(18px) scale(.9);}
-  to{opacity:1;transform:none;}
-}
-.end-title{
-  font-size:clamp(22px,3vw,38px);font-weight:900;
-  letter-spacing:-.02em;margin-bottom:clamp(8px,1.6vh,14px);
-}
-.end-desc{
-  font-size:clamp(13px,1.3vw,16px);line-height:1.9;
-  color:var(--text-2);max-width:600px;
-}
-.end-stats{
-  display:flex;flex-wrap:wrap;gap:clamp(28px,5vw,72px);
-  margin:clamp(20px,3.6vh,36px) 0;
-  padding:clamp(16px,2.6vh,26px) 0;
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-}
-.es{display:flex;flex-direction:column;gap:8px;}
-.es .lbl{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--text-3);
-}
-.es b{
-  font-family:var(--mono);font-weight:700;
-  font-size:clamp(22px,2.6vw,34px);letter-spacing:-.02em;
-  font-variant-numeric:tabular-nums;
-}
-.es b em{font-style:normal;color:var(--accent);}
-
-/* ============ RESPONSIVE ============ */
-@media (max-width:760px){
-  .opts{grid-template-columns:1fr;}
-  .play-bottom{gap:18px;flex-wrap:wrap;}
-  .stat.lives{margin-left:0;width:100%;}
+@media (max-width:480px){
+  .header h1{font-size:24px;}
+  .lesson-card{padding:14px 16px;}
+  .quiz-box{padding:18px;}
+  .question{font-size:16px;}
 }
 </style>
-
 </head>
 <body>
-<div class="app">
+<div class="voice-toggle on" id="voiceToggle" onclick="toggleVoice()">🔊 语音开</div>
 
-  <header class="topbar">
-    <div class="mark"><span class="dot"></span><span>七年级上册 · 历史 / HISTORY 7A</span></div>
-    <div id="topRight">UNIT 01</div>
-  </header>
+<!-- 课程选择页 -->
+<div id="pageHome" class="page active">
+  <div class="header">
+    <div class="seal">历史闯关</div>
+    <h1>七上历史</h1>
+    <p>按课选题 · 每题15秒 · 3条生命<br>答错显示解析 · 连击加分</p>
+  </div>
+  <div class="lesson-grid" id="lessonList"></div>
+  <p class="tip">共20课 · 约180道常考选择题 · 防复制已开启</p>
+</div>
 
-  <main class="viewport">
-
-    <!-- ========== START ========== -->
-    <section class="screen active" id="scrStart">
-      <div class="start-inner">
-        <div class="kicker">七年级上册 · 历史闯关</div>
-        <h1 class="title">历史<em>闯关</em></h1>
-        <div class="title-en">History Quest</div>
-        <p class="lede">
-          选择单元开始挑战，10 道题，3 条命。每道题限时 15 秒，答对得分、连击加成翻倍。
-        </p>
-
-        <div class="unit-grid">
-          <div class="unit-card" data-unit="1">
-            <div class="unit-img" style="background: linear-gradient(135deg, #f5e6d3 0%, #e8d4b8 100%);">
-              <span style="font-size:48px;">🏔️</span>
-            </div>
-            <div class="unit-info">
-              <h3>第一单元</h3>
-              <p>史前时期：中国境内早期人类与文明的起源</p>
-            </div>
-          </div>
-          <div class="unit-card" data-unit="2">
-            <div class="unit-img" style="background: linear-gradient(135deg, #d4c5a9 0%, #b8a682 100%);">
-              <span style="font-size:48px;">🏺</span>
-            </div>
-            <div class="unit-info">
-              <h3>第二单元</h3>
-              <p>夏商周时期：早期国家与社会变革</p>
-            </div>
-          </div>
-          <div class="unit-card" data-unit="3">
-            <div class="unit-img" style="background: linear-gradient(135deg, #c9a87c 0%, #a67c52 100%);">
-              <span style="font-size:48px;">🏯</span>
-            </div>
-            <div class="unit-info">
-              <h3>第三单元</h3>
-              <p>秦汉时期：统一多民族国家的建立和巩固</p>
-            </div>
-          </div>
-          <div class="unit-card" data-unit="4">
-            <div class="unit-img" style="background: linear-gradient(135deg, #b8956e 0%, #8b6914 100%);">
-              <span style="font-size:48px;">⚔️</span>
-            </div>
-            <div class="unit-info">
-              <h3>第四单元</h3>
-              <p>三国两晋南北朝时期：政权分立与民族交融</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="hint">点击单元卡片开始挑战 · 键盘 1–4 / A–D 作答</div>
+<!-- 答题页 -->
+<div id="pageQuiz" class="page">
+  <div class="quiz-box">
+    <div class="quiz-header">
+      <span class="lesson-name" id="currentLesson"></span>
+      <div class="quiz-stats">
+        <span>第<span id="qNum">1</span>/<span id="qTotal">10</span>题</span>
+        <span>❤️<span id="lives">3</span></span>
+        <span>连击<span id="combo">0</span></span>
+        <span>得分<span id="score">0</span></span>
       </div>
-    </section>
+    </div>
+    <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+    <div class="question" id="questionText"></div>
+    <div class="options" id="options"></div>
+    <div class="explain-panel" id="explainPanel">
+      <div class="explain-title">📖 考点解析</div>
+      <div class="explain-text" id="explainText"></div>
+      <button class="next-btn" onclick="nextQuestion()">下一题 →</button>
+    </div>
+  </div>
+</div>
 
-    <!-- ========== PLAY ========== -->
-    <section class="screen" id="scrPlay">
-      <div class="play-inner">
-        <div class="play-top">
-          <div class="pill" id="pillIndex">Q <b>01</b> / 10</div>
-          <div class="timebar"><i id="timeFill"></i></div>
-          <div class="pill" id="pillTime">15.0s</div>
-        </div>
-
-        <div class="qcard">
-          <div class="qtag" id="qTag">知识点</div>
-          <h2 class="qtext" id="qText">题目加载中…</h2>
-        </div>
-
-        <div class="opts" id="opts"></div>
-
-        <div class="play-bottom">
-          <div class="stat"><span class="lbl">Score</span><b id="statScore">0</b></div>
-          <div class="stat"><span class="lbl">Combo</span><b id="statCombo">×0</b></div>
-          <div class="stat lives"><span class="lbl">Lives</span><span id="statLives"></span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========== END ========== -->
-    <section class="screen" id="scrEnd">
-      <div class="end-inner">
-        <div class="kicker">RESULT · 本局结算</div>
-        <div class="rank" id="endRank">A</div>
-        <h2 class="end-title" id="endTitle">挑战完成</h2>
-        <p class="end-desc" id="endDesc"></p>
-        <div class="end-stats">
-          <div class="es"><span class="lbl">Score</span><b id="endScore">0</b></div>
-          <div class="es"><span class="lbl">Accuracy</span><b id="endAcc">0%</b></div>
-          <div class="es"><span class="lbl">Max Combo</span><b id="endCombo">0</b></div>
-          <div class="es"><span class="lbl">Answered</span><b id="endAnswered">0</b></div>
-        </div>
-        <button class="btn" id="btnRestart"><span>再来一局</span><em>RESTART</em></button>
-        <div class="hint">按 Enter 快速重开</div>
-      </div>
-    </section>
-
-  </main>
+<!-- 结果页 -->
+<div id="pageResult" class="page">
+  <div class="result-box">
+    <h2>闯关结束</h2>
+    <div class="result-score" id="finalScore">0</div>
+    <p class="result-msg" id="resultMsg"></p>
+    <div class="result-btns">
+      <button class="btn btn-primary" onclick="retryQuiz()">再考一次</button>
+      <button class="btn btn-secondary" onclick="backToLessons()">返回课程列表</button>
+    </div>
+  </div>
 </div>
 
 <script>
-(function(){
-  'use strict';
+// 音效资源
+const audioCorrect = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3");
+const audioWrong = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-software-interface-error-2564.mp3");
+audioCorrect.volume = 0.4;
+audioWrong.volume = 0.4;
 
-  /* ---------- 题库 ---------- */
-  const POOL = [
-    { tag:'第1课 · 远古人类', q:'我国境内目前已知最早的古人类之一是？',
-      opts:['北京人','元谋人','山顶洞人','蓝田人'], a:1 },
-    { tag:'第1课 · 远古人类', q:'元谋人生活的年代距今约？',
-      opts:['170 万年','70 万年','3 万年','100 万年'], a:0 },
-    { tag:'第1课 · 远古人类', q:'元谋人发现于今天的哪个省？',
-      opts:['陕西省','云南省','北京市','湖北省'], a:1 },
-    { tag:'第1课 · 远古人类', q:'北京人生活的地点是？',
-      opts:['云南元谋','陕西蓝田','北京周口店龙骨山','浙江余姚'], a:2 },
-    { tag:'第1课 · 远古人类', q:'北京人生活的年代距今约？',
-      opts:['约 170 万年','约 70 万—20 万年','约 3 万年','约 1 万年'], a:1 },
-    { tag:'第1课 · 远古人类', q:'北京人使用的石器属于？',
-      opts:['磨制石器','打制石器','玉器','陶器'], a:1 },
-    { tag:'第1课 · 远古人类', q:'使用打制石器的时代称为？',
-      opts:['新石器时代','旧石器时代','青铜时代','铁器时代'], a:1 },
-    { tag:'第1课 · 远古人类', q:'关于北京人用火，正确的是？',
-      opts:['会人工取火','使用天然火并保存火种','不会用火','只会生火不会保存'], a:1 },
-    { tag:'第1课 · 远古人类', q:'山顶洞人生活的年代距今约？',
-      opts:['170 万年','70 万年','3 万年','7000 年'], a:2 },
-    { tag:'第1课 · 远古人类', q:'山顶洞人相比北京人，掌握的新技术是？',
-      opts:['打制石器','磨光和钻孔技术','种植水稻','建造房屋'], a:1 },
-    { tag:'第1课 · 远古人类', q:'已经懂得人工取火的远古人类是？',
-      opts:['元谋人','北京人','山顶洞人','郧县人'], a:2 },
-    { tag:'第1课 · 远古人类', q:'会制作骨针、有爱美意识的远古人类是？',
-      opts:['北京人','元谋人','山顶洞人','半坡人'], a:2 },
-    { tag:'第1课 · 远古人类', q:'郧县人发现于今天的哪个省？',
-      opts:['陕西','湖北','云南','北京'], a:1 },
-    { tag:'第1课 · 远古人类', q:'距今约 100 万年、发现于湖北郧阳的远古人类是？',
-      opts:['元谋人','蓝田人','郧县人','北京人'], a:2 },
-    { tag:'第1课 · 远古人类', q:'按距今年代从早到晚排序：①北京人 ②元谋人 ③山顶洞人',
-      opts:['①②③','②①③','③②①','②③①'], a:1 },
-    { tag:'第1课 · 远古人类', q:'研究远古人类历史的主要依据是？',
-      opts:['神话传说','史书记载','化石和考古发现','学者推测'], a:2 },
-    { tag:'第1课 · 远古人类', q:'我国是世界上发现古人类化石和哪种时代遗址最多的国家之一？',
-      opts:['新石器时代','旧石器时代','青铜时代','铁器时代'], a:1 },
-    { tag:'第1课 · 远古人类', q:'北京人过群居生活，其社会组织形式是？',
-      opts:['氏族','原始人群','国家','部落联盟'], a:1 },
-    { tag:'第1课 · 远古人类', q:'下列远古人类中，模样和现代人基本相同的是？',
-      opts:['北京人','元谋人','山顶洞人','蓝田人'], a:2 },
-    { tag:'第1课 · 远古人类', q:'保留了猿的某些体质特征的远古人类是？',
-      opts:['北京人','山顶洞人','河姆渡人','半坡人'], a:0 },
-    { tag:'第2课 · 原始农耕', q:'河姆渡遗址位于今天的哪个省？',
-      opts:['陕西','浙江','北京','湖北'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'河姆渡居民种植的主要农作物是？',
-      opts:['粟','水稻','小麦','玉米'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'河姆渡居民居住的房屋样式是？',
-      opts:['半地穴式圆形房屋','干栏式建筑','宫殿','窑洞'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'半坡遗址位于今天的哪个城市附近？',
-      opts:['陕西西安','浙江余姚','北京周口店','云南元谋'], a:0 },
-    { tag:'第2课 · 原始农耕', q:'半坡居民种植的主要农作物是？',
-      opts:['水稻','粟','玉米','大豆'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'半坡居民居住的房屋样式是？',
-      opts:['干栏式建筑','半地穴式圆形房屋','高架屋','砖瓦房'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'半坡遗址出土的彩陶代表器物是？',
-      opts:['玉琮','人面鱼纹彩陶盆','骨耜','铁犁'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'河姆渡遗址出土的农业生产工具主要是？',
-      opts:['铁农具','骨耜','铜器','石镰'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'使用磨制石器的时代称为？',
-      opts:['旧石器时代','新石器时代','青铜时代','金石并用时代'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'我国原始农耕时代形成的农作物分布格局是？',
-      opts:['南粟北稻','南稻北粟','南北都种水稻','南北都种粟'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'河姆渡和半坡居民都使用的石器类型是？',
-      opts:['打制石器','磨制石器','天然石块','鹅卵石'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'距今约 7000 年、位于长江流域的农耕遗址是？',
-      opts:['半坡遗址','河姆渡遗址','北京人遗址','良渚古城'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'距今约 6000 年、位于黄河流域的农耕遗址是？',
-      opts:['河姆渡遗址','半坡遗址','元谋人遗址','陶寺遗址'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'河姆渡人建造干栏式建筑，主要是为了适应？',
-      opts:['防寒保暖','通风防潮、防蛇虫','防御敌人','祭祀需要'], a:1 },
-    { tag:'第2课 · 原始农耕', q:'下列哪一项不属于原始农业兴起和发展的重要标志？',
-      opts:['农作物种植','家畜饲养','磨制石器','铁器牛耕'], a:3 },
-    { tag:'第3课 · 文明起源', q:'被后人尊崇为中华民族“人文初祖”的是？',
-      opts:['尧和舜','炎帝和黄帝','禹和启','蚩尤'], a:1 },
-    { tag:'第3课 · 文明起源', q:'炎黄部落联盟以后逐渐形成为？',
-      opts:['华夏族','蒙古族','朝鲜族','藏族'], a:0 },
-    { tag:'第3课 · 文明起源', q:'黄帝和炎帝之间进行的战役是？',
-      opts:['涿鹿之战','阪泉之战','牧野之战','巨鹿之战'], a:1 },
-    { tag:'第3课 · 文明起源', q:'炎黄部落打败蚩尤部落的战役是？',
-      opts:['阪泉之战','涿鹿之战','长平之战','桂陵之战'], a:1 },
-    { tag:'第3课 · 文明起源', q:'尧、舜、禹时期，将联盟首领位子传给贤德之人的制度是？',
-      opts:['世袭制','禅让制','分封制','郡县制'], a:1 },
-    { tag:'第3课 · 文明起源', q:'禅让制推举部落联盟首领的标准是？',
-      opts:['血缘亲疏','贤德与才能','财富多少','武力强弱'], a:1 },
-    { tag:'第3课 · 文明起源', q:'三过家门而不入、治水有功的是？',
-      opts:['黄帝','尧','舜','禹'], a:3 },
-    { tag:'第3课 · 文明起源', q:'大禹治水采用的主要方法是？',
-      opts:['堵塞','疏导','抽干','迁移'], a:1 },
-    { tag:'第3课 · 文明起源', q:'良渚古城遗址位于今天的？',
-      opts:['山西襄汾','浙江余杭','陕西西安','北京周口店'], a:1 },
-    { tag:'第3课 · 文明起源', q:'良渚古城距今约？',
-      opts:['约 170 万年','约 7000 年','约 5300—4300 年','约 3 万年'], a:2 },
-    { tag:'第3课 · 文明起源', q:'良渚古城最具代表性的礼器是？',
-      opts:['人面鱼纹彩陶盆','玉琮、玉钺','铁剑','甲骨'], a:1 },
-    { tag:'第3课 · 文明起源', q:'良渚古城的考古发现，实证了哪一流域距今约 5000 年已出现早期国家？',
-      opts:['黄河流域','长江下游','珠江流域','辽河流域'], a:1 },
-    { tag:'第3课 · 文明起源', q:'陶寺古城遗址位于今天的？',
-      opts:['山西襄汾','浙江余杭','河南安阳','陕西临潼'], a:0 },
-    { tag:'第3课 · 文明起源', q:'黄帝之后，黄河流域三个部族联盟依次担任首领的是？',
-      opts:['尧、舜、禹','舜、尧、禹','禹、舜、尧','尧、禹、舜'], a:0 },
-    { tag:'第3课 · 文明起源', q:'关于远古传说与历史事实的关系，正确的是？',
-      opts:['传说完全等于史实','传说中也可能蕴含着可靠的历史信息','传说毫无价值','传说都是后人编造的'], a:1 },
+let voiceOn = true;
+function toggleVoice(){
+  voiceOn = !voiceOn;
+  const btn = document.getElementById("voiceToggle");
+  if(voiceOn){
+    btn.classList.add("on");
+    btn.innerText = "🔊 语音开";
+  }else{
+    btn.classList.remove("on");
+    btn.innerText = "🔇 语音关";
+  }
+}
 
-    // ========== 第二单元：夏商周时期 ==========
-    { tag:'第4课 · 夏商周更替', q:'中国历史上第一个王朝是？',
-      opts:['夏朝','商朝','西周','秦朝'], a:0 },
-    { tag:'第4课 · 夏商周更替', q:'夏朝的建立者是？',
-      opts:['禹','启','汤','周武王'], a:0 },
-    { tag:'第4课 · 夏商周更替', q:'"家天下"取代"公天下"开始于？',
-      opts:['禹传位给启','汤灭夏','武王伐纣','盘庚迁殷'], a:0 },
-    { tag:'第4课 · 夏商周更替', q:'商朝的建立者是？',
-      opts:['禹','汤','周武王','盘庚'], a:1 },
-    { tag:'第4课 · 夏商周更替', q:'商朝多次迁都，最终把都城稳定在殷的商王是？',
-      opts:['汤','盘庚','纣','武丁'], a:1 },
-    { tag:'第4课 · 夏商周更替', q:'西周的建立者是？',
-      opts:['周文王','周武王','周幽王','周平王'], a:1 },
-    { tag:'第4课 · 夏商周更替', q:'武王伐纣的决战是？',
-      opts:['涿鹿之战','阪泉之战','牧野之战','长平之战'], a:2 },
-    { tag:'第4课 · 夏商周更替', q:'西周初年，为稳定政治形势，巩固疆土，实行的制度是？',
-      opts:['禅让制','世袭制','分封制','郡县制'], a:2 },
-    { tag:'第4课 · 夏商周更替', q:'西周分封制的核心是？',
-      opts:['分封土地和人民给宗亲功臣','按血缘远近选官','把土地分给农民','中央直接管理地方'], a:0 },
-    { tag:'第4课 · 夏商周更替', q:'西周灭亡的标志性事件是？',
-      opts:['盘庚迁殷','国人暴动','烽火戏诸侯','平王东迁'], a:2 },
-    { tag:'第4课 · 夏商周更替', q:'东周开始于哪一年？',
-      opts:['公元前2070年','公元前1600年','公元前1046年','公元前770年'], a:3 },
-    { tag:'第5课 · 青铜器与甲骨文', q:'迄今世界上出土的最重的青铜器是？',
-      opts:['四羊方尊','司母戊鼎','利簋','三星堆青铜面具'], a:1 },
-    { tag:'第5课 · 青铜器与甲骨文', q:'甲骨文的发现地是？',
-      opts:['河南安阳殷墟','陕西西安半坡','北京周口店','浙江余姚河姆渡'], a:0 },
-    { tag:'第5课 · 青铜器与甲骨文', q:'我国有文字可考的历史开始于？',
-      opts:['夏朝','商朝','西周','东周'], a:1 },
-    { tag:'第5课 · 青铜器与甲骨文', q:'甲骨文的造字方法不包括？',
-      opts:['象形','指事','会意','楷书'], a:3 },
-    { tag:'第6课 · 动荡的春秋时期', q:'春秋时期，社会生产力水平提高的重要标志是？',
-      opts:['打制石器的使用','磨制石器的使用','铁制农具和牛耕的出现','青铜器的广泛使用'], a:2 },
-    { tag:'第6课 · 动荡的春秋时期', q:'春秋时期，第一个称霸的霸主是？',
-      opts:['晋文公','齐桓公','楚庄王','秦穆公'], a:1 },
-    { tag:'第6课 · 动荡的春秋时期', q:'齐桓公任用谁为相进行改革，成就霸业？',
-      opts:['管仲','商鞅','李斯','范蠡'], a:0 },
-    { tag:'第6课 · 动荡的春秋时期', q:'"尊王攘夷"口号的提出者是？',
-      opts:['晋文公','齐桓公','楚庄王','吴王阖闾'], a:1 },
-    { tag:'第7课 · 战国时期', q:'战国七雄中，位于最西边的是？',
-      opts:['齐国','楚国','秦国','燕国'], a:2 },
-    { tag:'第7课 · 战国时期', q:'战国时期，使秦国一跃成为最强盛的诸侯国，为统一全国奠定基础的改革是？',
-      opts:['管仲改革','商鞅变法','李悝变法','吴起变法'], a:1 },
-    { tag:'第7课 · 战国时期', q:'商鞅变法开始于哪一年？',
-      opts:['公元前356年','公元前221年','公元前1046年','公元前770年'], a:0 },
-    { tag:'第7课 · 战国时期', q:'商鞅变法中，有利于加强中央对地方控制的措施是？',
-      opts:['废除井田制','奖励耕织','确立县制','奖励军功'], a:2 },
-    { tag:'第7课 · 战国时期', q:'战国时期，闻名世界的防洪灌溉工程是？',
-      opts:['长城','都江堰','灵渠','大运河'], a:1 },
-    { tag:'第7课 · 战国时期', q:'都江堰的主持修建者是？',
-      opts:['商鞅','李冰','秦始皇','大禹'], a:1 },
-    { tag:'第8课 · 百家争鸣', q:'儒家学派的创始人是？',
-      opts:['老子','孔子','墨子','韩非子'], a:1 },
-    { tag:'第8课 · 百家争鸣', q:'孔子的核心思想是？',
-      opts:['"仁"','"无为而治"','"兼爱""非攻"','"法治"'], a:0 },
-    { tag:'第8课 · 百家争鸣', q:'道家学派的创始人是？',
-      opts:['孔子','老子','庄子','韩非子'], a:1 },
-    { tag:'第8课 · 百家争鸣', q:'主张"无为而治"的思想家是？',
-      opts:['孔子','老子','墨子','韩非子'], a:1 },
-    { tag:'第8课 · 百家争鸣', q:'墨家学派的创始人是？',
-      opts:['墨子','孟子','荀子','庄子'], a:0 },
-    { tag:'第8课 · 百家争鸣', q:'主张"兼爱""非攻"的思想家是？',
-      opts:['孔子','老子','墨子','韩非子'], a:2 },
-    { tag:'第8课 · 百家争鸣', q:'法家的集大成者是？',
-      opts:['商鞅','李斯','韩非子','吴起'], a:2 },
-    { tag:'第8课 · 百家争鸣', q:'主张以法治国，建立中央集权专制统治的思想家是？',
-      opts:['孔子','老子','墨子','韩非子'], a:3 },
+function speakText(text){
+  if(!voiceOn) return;
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "zh-CN";
+  u.rate = 1.1;
+  u.volume = 0.6;
+  window.speechSynthesis.speak(u);
+}
 
-    // ========== 第三单元：秦汉时期 ==========
-    { tag:'第9课 · 秦统一中国', q:'我国历史上第一个统一的多民族的封建国家是？',
-      opts:['夏朝','商朝','西周','秦朝'], a:3 },
-    { tag:'第9课 · 秦统一中国', q:'秦朝建立的时间是？',
-      opts:['公元前221年','公元前2070年','公元前1046年','公元前220年'], a:0 },
-    { tag:'第9课 · 秦统一中国', q:'秦朝的建立者是？',
-      opts:['嬴政','嬴荡','扶苏','胡亥'], a:0 },
-    { tag:'第9课 · 秦统一中国', q:'秦朝建立后，在地方上推行的制度是？',
-      opts:['分封制','郡县制','行省制','科举制'], a:1 },
-    { tag:'第9课 · 秦统一中国', q:'秦朝统一后，全国通用的文字是？',
-      opts:['甲骨文','金文','小篆','楷书'], a:2 },
-    { tag:'第9课 · 秦统一中国', q:'秦朝统一后，全国通用的货币是？',
-      opts:['刀币','布币','圆形方孔半两钱','五铢钱'], a:2 },
-    { tag:'第9课 · 秦统一中国', q:'为了抵御匈奴，秦朝修筑的著名工程是？',
-      opts:['都江堰','长城','灵渠','大运河'], a:1 },
-    { tag:'第10课 · 秦末农民大起义', q:'中国历史上第一次农民大起义是？',
-      opts:['黄巾起义','陈胜吴广起义','黄巢起义','李自成起义'], a:1 },
-    { tag:'第10课 · 秦末农民大起义', q:'陈胜吴广起义爆发的地点是？',
-      opts:['大泽乡','咸阳','巨鹿','垓下'], a:0 },
-    { tag:'第10课 · 秦末农民大起义', q:'秦朝灭亡于哪一年？',
-      opts:['公元前221年','公元前209年','公元前207年','公元前202年'], a:2 },
-    { tag:'第10课 · 秦末农民大起义', q:'楚汉之争的获胜者是？',
-      opts:['项羽','刘邦','陈胜','吴广'], a:1 },
-    { tag:'第11课 · 西汉建立和"文景之治"', q:'西汉的建立者是？',
-      opts:['刘邦','刘彻','刘秀','刘备'], a:0 },
-    { tag:'第11课 · 西汉建立和"文景之治"', q:'西汉建立的时间是？',
-      opts:['公元前221年','公元前202年','公元25年','公元220年'], a:1 },
-    { tag:'第11课 · 西汉建立和"文景之治"', q:'西汉初期，统治者推行的政策是？',
-      opts:['重农抑商','休养生息','严刑峻法','穷兵黩武'], a:1 },
-    { tag:'第11课 · 西汉建立和"文景之治"', q:'"文景之治"指的是哪两位皇帝统治时期的治世局面？',
-      opts:['汉高祖和汉文帝','汉文帝和汉景帝','汉景帝和汉武帝','汉武帝和汉宣帝'], a:1 },
-    { tag:'第12课 · 汉武帝巩固大一统王朝', q:'汉武帝时期，接受谁的建议，"罢黜百家，独尊儒术"？',
-      opts:['李斯','董仲舒','主父偃','卫青'], a:1 },
-    { tag:'第12课 · 汉武帝巩固大一统王朝', q:'汉武帝为削弱诸侯王势力，采取的措施是？',
-      opts:['分封制','推恩令','郡县制','科举制'], a:1 },
-    { tag:'第12课 · 汉武帝巩固大一统王朝', q:'汉武帝时期，统一铸造的货币是？',
-      opts:['半两钱','五铢钱','刀币','布币'], a:1 },
-    { tag:'第12课 · 汉武帝巩固大一统王朝', q:'汉武帝时期，率军北击匈奴的著名将领是？',
-      opts:['卫青、霍去病','陈胜、吴广','项羽、刘邦','刘备、诸葛亮'], a:0 },
-    { tag:'第13课 · 沟通中外文明的"丝绸之路"', q:'两次出使西域，为丝绸之路开通奠定基础的是？',
-      opts:['张骞','班超','甘英','玄奘'], a:0 },
-    { tag:'第13课 · 沟通中外文明的"丝绸之路"', q:'丝绸之路的起点是？',
-      opts:['洛阳','长安','咸阳','敦煌'], a:1 },
-    { tag:'第13课 · 沟通中外文明的"丝绸之路"', q:'东汉时期，出使西域，经营西域30多年的是？',
-      opts:['张骞','班超','甘英','司马迁'], a:1 },
-    { tag:'第14课 · 东汉的兴亡', q:'东汉的建立者是？',
-      opts:['刘邦','刘彻','刘秀','刘备'], a:2 },
-    { tag:'第14课 · 东汉的兴亡', q:'东汉建立的时间是？',
-      opts:['公元前202年','公元9年','公元25年','公元220年'], a:2 },
-    { tag:'第14课 · 东汉的兴亡', q:'东汉时期，改进造纸术的是？',
-      opts:['张衡','蔡伦','华佗','张仲景'], a:1 },
-    { tag:'第15课 · 两汉的科技和文化', q:'张仲景的医学著作是？',
-      opts:['《伤寒杂病论》','《本草纲目》','《黄帝内经》','《千金方》'], a:0 },
-    { tag:'第15课 · 两汉的科技和文化', q:'被后世称为"医圣"的是？',
-      opts:['华佗','张仲景','李时珍','扁鹊'], a:1 },
-    { tag:'第15课 · 两汉的科技和文化', q:'发明了"麻沸散"的名医是？',
-      opts:['张仲景','华佗','李时珍','孙思邈'], a:1 },
-    { tag:'第15课 · 两汉的科技和文化', q:'我国第一部纪传体通史是？',
-      opts:['《春秋》','《史记》','《汉书》','《资治通鉴》'], a:1 },
-    { tag:'第15课 · 两汉的科技和文化', q:'《史记》的作者是？',
-      opts:['司马迁','司马光','班固','班超'], a:0 },
+// 题库
+const POOL = [
+  // 第1课 远古人类
+  {tag:"第1课 · 远古人类", q:"我国境内目前已知最早的古人类之一是？", opts:["北京人","元谋人","山顶洞人","蓝田人"], a:1, explain:"元谋人距今约170万年，是我国境内目前已确认的最早古人类。北京人距今约70万—20万年，山顶洞人距今约3万年。"},
+  {tag:"第1课 · 远古人类", q:"元谋人生活的年代距今约？", opts:["170万年","70万年","3万年","100万年"], a:0, explain:"元谋人距今约170万年，是我国境内目前已确认的最早古人类。"},
+  {tag:"第1课 · 远古人类", q:"元谋人发现于今天的哪个省？", opts:["陕西省","云南省","北京市","湖北省"], a:1, explain:"元谋人发现于云南元谋县，因此得名“元谋人”。"},
+  {tag:"第1课 · 远古人类", q:"北京人生活的地点是？", opts:["云南元谋","陕西蓝田","北京周口店龙骨山","浙江余姚"], a:2, explain:"北京人遗址位于北京西南周口店龙骨山上。"},
+  {tag:"第1课 · 远古人类", q:"北京人生活的年代距今约？", opts:["约170万年","约70万—20万年","约3万年","约1万年"], a:1, explain:"北京人生活在距今约70万—20万年。"},
+  {tag:"第1课 · 远古人类", q:"北京人使用的石器属于？", opts:["磨制石器","打制石器","玉器","陶器"], a:1, explain:"北京人制作石器的技术比较成熟，采用不同的打制方法，制作成不同类型的工具。"},
+  {tag:"第1课 · 远古人类", q:"使用打制石器的时代称为？", opts:["新石器时代","旧石器时代","青铜时代","铁器时代"], a:1, explain:"使用打制石器的时代，叫作旧石器时代。"},
+  {tag:"第1课 · 远古人类", q:"关于北京人用火，正确的是？", opts:["会人工取火","使用天然火并保存火种","不会用火","只会生火不会保存"], a:1, explain:"北京人已经学会使用火，还会长时间保存火种。"},
+  {tag:"第1课 · 远古人类", q:"山顶洞人生活的年代距今约？", opts:["170万年","70万年","3万年","7000年"], a:2, explain:"山顶洞人生活在距今约3万年。"},
+  {tag:"第1课 · 远古人类", q:"山顶洞人相比北京人，掌握的新技术是？", opts:["打制石器","磨光和钻孔技术","种植水稻","建造房屋"], a:1, explain:"山顶洞人已经掌握磨光和钻孔技术。"},
+  {tag:"第1课 · 远古人类", q:"已经懂得人工取火的远古人类是？", opts:["元谋人","北京人","山顶洞人","郧县人"], a:2, explain:"山顶洞人已经懂得人工取火。"},
+  {tag:"第1课 · 远古人类", q:"会制作骨针、有爱美意识的远古人类是？", opts:["北京人","元谋人","山顶洞人","半坡人"], a:2, explain:"山顶洞人有爱美意识，会缝制衣服。"},
 
-    // ========== 第四单元：三国两晋南北朝时期 ==========
-    { tag:'第16课 · 三国鼎立', q:'为三国鼎立局面形成奠定基础的战役是？',
-      opts:['巨鹿之战','官渡之战','赤壁之战','淝水之战'], a:2 },
-    { tag:'第16课 · 三国鼎立', q:'官渡之战中，曹操击败的是谁？',
-      opts:['袁绍','刘备','孙权','董卓'], a:0 },
-    { tag:'第16课 · 三国鼎立', q:'三国中，魏国的建立者是？',
-      opts:['曹操','曹丕','曹植','司马懿'], a:1 },
-    { tag:'第16课 · 三国鼎立', q:'三国中，蜀国的建立者是？',
-      opts:['刘备','刘禅','刘邦','刘表'], a:0 },
-    { tag:'第16课 · 三国鼎立', q:'三国中，吴国的建立者是？',
-      opts:['孙策','孙权','孙坚','周瑜'], a:1 },
-    { tag:'第17课 · 西晋的短暂统一', q:'西晋的建立者是？',
-      opts:['司马懿','司马昭','司马炎','司马睿'], a:2 },
-    { tag:'第17课 · 西晋的短暂统一', q:'西晋统一全国是在哪一年？',
-      opts:['266年','280年','316年','317年'], a:1 },
-    { tag:'第17课 · 西晋的短暂统一', q:'西晋衰落的标志是？',
-      opts:['七国之乱','八王之乱','黄巾起义','淝水之战'], a:1 },
-    { tag:'第18课 · 东晋南朝时期江南地区的开发', q:'东晋的建立者是？',
-      opts:['司马炎','司马睿','司马懿','司马昭'], a:1 },
-    { tag:'第18课 · 东晋南朝时期江南地区的开发', q:'东晋的都城是？',
-      opts:['洛阳','长安','建康','北京'], a:2 },
-    { tag:'第19课 · 北魏政治和北方民族大交融', q:'北魏孝文帝改革的主要目的是？',
-      opts:['抵御匈奴','学习汉族先进文化，加强统治','统一全国','发展经济'], a:1 },
-    { tag:'第19课 · 北魏政治和北方民族大交融', q:'北魏孝文帝把都城迁到了？',
-      opts:['平城','洛阳','长安','建康'], a:1 },
-    { tag:'第19课 · 北魏政治和北方民族大交融', q:'北魏孝文帝改革的突出作用是？',
-      opts:['促进了民族交融','加强了中央集权','抵御了外族入侵','发展了经济'], a:0 },
-    { tag:'第20课 · 魏晋南北朝的科技与文化', q:'世界上第一个把圆周率精确到小数点以后第七位的科学家是？',
-      opts:['祖冲之','贾思勰','郦道元','王羲之'], a:0 },
-    { tag:'第20课 · 魏晋南北朝的科技与文化', q:'我国现存最早的一部完整的农书是？',
-      opts:['《齐民要术》','《农政全书》','《天工开物》','《本草纲目》'], a:0 },
-    { tag:'第20课 · 魏晋南北朝的科技与文化', q:'《齐民要术》的作者是？',
-      opts:['祖冲之','贾思勰','郦道元','王羲之'], a:1 },
-    { tag:'第20课 · 魏晋南北朝的科技与文化', q:'被后世称为"书圣"的是？',
-      opts:['王羲之','王献之','颜真卿','柳公权'], a:0 },
-    { tag:'第20课 · 魏晋南北朝的科技与文化', q:'王羲之的代表作是？',
-      opts:['《兰亭集序》','《清明上河图》','《玄秘塔碑》','《史记》'], a:0 },
-    { tag:'第20课 · 魏晋南北朝的科技与文化', q:'南北朝时期，开凿的著名石窟是？',
-      opts:['莫高窟','云冈石窟和龙门石窟','麦积山石窟','大足石刻'], a:1 }
-  ];
+  // 第2课 原始农耕
+  {tag:"第2课 · 原始农耕", q:"河姆渡遗址位于今天的哪个省？", opts:["陕西","浙江","北京","湖北"], a:1, explain:"河姆渡遗址位于浙江余姚，属于长江流域。"},
+  {tag:"第2课 · 原始农耕", q:"河姆渡居民种植的主要农作物是？", opts:["粟","水稻","小麦","玉米"], a:1, explain:"河姆渡人种植水稻，我国是世界上最早种植水稻的国家之一。"},
+  {tag:"第2课 · 原始农耕", q:"河姆渡居民居住的房屋样式是？", opts:["半地穴式圆形房屋","干栏式建筑","宫殿","窑洞"], a:1, explain:"河姆渡人居住干栏式建筑，通风防潮。"},
+  {tag:"第2课 · 原始农耕", q:"半坡遗址位于今天的哪个城市附近？", opts:["陕西西安","浙江余姚","北京周口店","云南元谋"], a:0, explain:"半坡遗址位于陕西西安东部半坡村，属于黄河流域。"},
+  {tag:"第2课 · 原始农耕", q:"半坡居民种植的主要农作物是？", opts:["水稻","粟","玉米","大豆"], a:1, explain:"半坡人种植粟，我国是世界上最早种植粟的国家之一。"},
+  {tag:"第2课 · 原始农耕", q:"半坡居民居住的房屋样式是？", opts:["干栏式建筑","半地穴式圆形房屋","高架屋","砖瓦房"], a:1, explain:"半坡人居住半地穴式圆形房屋，保暖防风。"},
+  {tag:"第2课 · 原始农耕", q:"半坡遗址出土的彩陶代表器物是？", opts:["玉琮","人面鱼纹彩陶盆","骨耜","铁犁"], a:1, explain:"半坡彩陶以人面鱼纹彩陶盆最为著名。"},
+  {tag:"第2课 · 原始农耕", q:"河姆渡遗址出土的农业生产工具主要是？", opts:["铁农具","骨耜","铜器","石镰"], a:1, explain:"河姆渡人使用骨耜耕地。"},
+  {tag:"第2课 · 原始农耕", q:"使用磨制石器的时代称为？", opts:["旧石器时代","新石器时代","青铜时代","金石并用时代"], a:1, explain:"使用磨制石器的时代，叫作新石器时代。"},
+  {tag:"第2课 · 原始农耕", q:"我国原始农耕时代形成的农作物分布格局是？", opts:["南粟北稻","南稻北粟","南北都种水稻","南北都种粟"], a:1, explain:"河姆渡种水稻（南方），半坡种粟（北方），形成南稻北粟的格局。"},
 
-  /* ---------- 状态 ---------- */
-  const DUR = 15000;
-  const TOTAL_Q = 10;
+  // 第3课 文明起源
+  {tag:"第3课 · 文明起源", q:"被后人尊崇为中华民族“人文初祖”的是？", opts:["尧和舜","炎帝和黄帝","禹和启","蚩尤"], a:1, explain:"炎帝和黄帝部落联盟以后逐渐形成华夏族，后人尊崇炎帝和黄帝为中华民族的人文初祖。"},
+  {tag:"第3课 · 文明起源", q:"炎黄部落联盟以后逐渐形成为？", opts:["华夏族","蒙古族","朝鲜族","藏族"], a:0, explain:"炎黄部落联盟以后逐渐形成为华夏族，因此后人尊崇炎帝和黄帝为中华民族的人文初祖。"},
+  {tag:"第3课 · 文明起源", q:"黄帝和炎帝之间进行的战役是？", opts:["涿鹿之战","阪泉之战","牧野之战","巨鹿之战"], a:1, explain:"黄帝和炎帝在阪泉之战中打败炎帝，两大部落结成联盟。"},
+  {tag:"第3课 · 文明起源", q:"炎黄部落打败蚩尤部落的战役是？", opts:["阪泉之战","涿鹿之战","长平之战","桂陵之战"], a:1, explain:"炎黄部落在涿鹿之战中打败蚩尤部落，联盟逐渐形成华夏族。"},
+  {tag:"第3课 · 文明起源", q:"尧、舜、禹时期，将联盟首领位子传给贤德之人的制度是？", opts:["世袭制","禅让制","分封制","郡县制"], a:1, explain:"禅让制是将部落联盟首领位子传给贤德之人的制度。"},
+  {tag:"第3课 · 文明起源", q:"禅让制推举部落联盟首领的标准是？", opts:["血缘亲疏","贤德与才能","财富多少","武力强弱"], a:1, explain:"禅让制推举的标准是贤德与才能。"},
+  {tag:"第3课 · 文明起源", q:"三过家门而不入、治水有功的是？", opts:["黄帝","尧","舜","禹"], a:3, explain:"禹全身心投入治水，曾三过家门而不入，经过10多年努力，终于消除了水患。"},
+  {tag:"第3课 · 文明起源", q:"大禹治水采用的主要方法是？", opts:["堵塞","疏导","抽干","迁移"], a:1, explain:"禹采用疏导的方法，开凿河渠疏导洪水入海。"},
+  {tag:"第3课 · 文明起源", q:"良渚古城遗址位于今天的？", opts:["山西襄汾","浙江余杭","陕西西安","北京周口店"], a:1, explain:"良渚古城遗址位于浙江余杭。"},
+  {tag:"第3课 · 文明起源", q:"良渚古城最具代表性的礼器是？", opts:["人面鱼纹彩陶盆","玉琮、玉钺","铁剑","甲骨"], a:1, explain:"良渚古城出土了玉器，如琮、璧、钺等，代表了当时的礼仪制度。"},
 
-  const G = {
-    deck: [], i: 0, score: 0, combo: 0, best: 0, lives: 3,
-    answered: 0, correct: 0,
-    locked: true, running: false,
-    t: DUR, last: 0, rafId: 0
-  };
+  // 第4课 夏商周更替
+  {tag:"第4课 · 夏商周更替", q:"中国历史上第一个王朝是？", opts:["夏朝","商朝","西周","秦朝"], a:0, explain:"约公元前2070年，禹建立夏王朝，这是中国历史上第一个王朝。"},
+  {tag:"第4课 · 夏商周更替", q:"夏朝的建立者是？", opts:["禹","启","汤","周武王"], a:0, explain:"约公元前2070年，禹建立夏王朝。"},
+  {tag:"第4课 · 夏商周更替", q:"“家天下”取代“公天下”开始于？", opts:["禹传位给启","汤灭夏","武王伐纣","盘庚迁殷"], a:0, explain:"禹死后，启继承父位，世袭制代替了禅让制，“公天下”变成了“家天下”。"},
+  {tag:"第4课 · 夏商周更替", q:"商朝的建立者是？", opts:["禹","汤","周武王","盘庚"], a:1, explain:"约公元前1600年，汤建立商朝。"},
+  {tag:"第4课 · 夏商周更替", q:"商朝多次迁都，最终把都城稳定在殷的商王是？", opts:["汤","盘庚","纣","武丁"], a:1, explain:"商朝多次迁都，到商王盘庚时迁到殷，此后保持了相对稳定。"},
+  {tag:"第4课 · 夏商周更替", q:"西周的建立者是？", opts:["周文王","周武王","周幽王","周平王"], a:1, explain:"公元前1046年，周武王建立西周，定都镐京。"},
+  {tag:"第4课 · 夏商周更替", q:"武王伐纣的决战是？", opts:["涿鹿之战","阪泉之战","牧野之战","长平之战"], a:2, explain:"公元前1046年，武王伐纣，双方在牧野决战，商朝灭亡。"},
+  {tag:"第4课 · 夏商周更替", q:"西周初年，为稳定政治形势，巩固疆土，实行的制度是？", opts:["禅让制","世袭制","分封制","郡县制"], a:2, explain:"西周实行分封制，周王根据血缘关系远近和功劳大小，将宗亲和功臣等分封到各地。"},
+  {tag:"第4课 · 夏商周更替", q:"西周分封制的核心是？", opts:["分封土地和人民给宗亲功臣","按血缘远近选官","把土地分给农民","中央直接管理地方"], a:0, explain:"分封制的核心是周王将土地和人民分封给宗亲和功臣，建立诸侯国。"},
+  {tag:"第4课 · 夏商周更替", q:"东周开始于哪一年？", opts:["公元前2070年","公元前1600年","公元前1046年","公元前770年"], a:3, explain:"公元前770年，周平王东迁洛邑，史称东周。"},
 
-  const $ = id => document.getElementById(id);
+  // 第5课 青铜器与甲骨文
+  {tag:"第5课 · 青铜器与甲骨文", q:"迄今世界上出土的最重的青铜器是？", opts:["四羊方尊","司母戊鼎","利簋","三星堆青铜面具"], a:1, explain:"司母戊鼎是迄今世界上出土的最重的青铜器。"},
+  {tag:"第5课 · 青铜器与甲骨文", q:"甲骨文的发现地是？", opts:["河南安阳殷墟","陕西西安半坡","北京周口店","浙江余姚河姆渡"], a:0, explain:"甲骨文是中国商周时期刻写在龟甲和牛、羊等兽骨上的文字，发现于河南安阳殷墟。"},
+  {tag:"第5课 · 青铜器与甲骨文", q:"我国有文字可考的历史开始于？", opts:["夏朝","商朝","西周","东周"], a:1, explain:"甲骨文是中国已发现的古代文字中年代最早、体系较为完整的文字，我国有文字可考的历史从商朝开始。"},
+  {tag:"第5课 · 青铜器与甲骨文", q:"甲骨文的造字方法不包括？", opts:["象形","指事","会意","楷书"], a:3, explain:"甲骨文使用象形、指事、会意、形声等多种造字方法，楷书是后来出现的字体。"},
 
-  /* ---------- 工具 ---------- */
-  function shuffle(arr){
-    const a = arr.slice();
-    for(let i = a.length - 1; i > 0; i--){
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+  // 第6课 动荡的春秋时期
+  {tag:"第6课 · 动荡的春秋时期", q:"春秋时期，社会生产力水平提高的重要标志是？", opts:["打制石器的使用","磨制石器的使用","铁制农具和牛耕的出现","青铜器的广泛使用"], a:2, explain:"春秋时期，铁制农具和牛耕出现，促进了农业上的深耕细作，是社会生产力水平提高的重要标志。"},
+  {tag:"第6课 · 动荡的春秋时期", q:"春秋时期，第一个称霸的霸主是？", opts:["晋文公","齐桓公","楚庄王","秦穆公"], a:1, explain:"齐桓公任用管仲为相，进行改革，以“尊王攘夷”为号召，成为春秋时期第一个霸主。"},
+  {tag:"第6课 · 动荡的春秋时期", q:"齐桓公任用谁为相进行改革，成就霸业？", opts:["管仲","商鞅","李斯","范蠡"], a:0, explain:"齐桓公任用管仲为相，改革内政，发展生产，训练军队，使齐国的经济和军事实力大为提高。"},
+  {tag:"第6课 · 动荡的春秋时期", q:"“尊王攘夷”口号的提出者是？", opts:["晋文公","齐桓公","楚庄王","吴王阖闾"], a:1, explain:"齐桓公以“尊王攘夷”为号召，号令诸侯，成为春秋时期第一个霸主。"},
+
+  // 第7课 战国时期
+  {tag:"第7课 · 战国时期", q:"战国七雄中，位于最西边的是？", opts:["齐国","楚国","秦国","燕国"], a:2, explain:"战国七雄位置：齐东、楚南、秦西、燕北，中间是赵魏韩。"},
+  {tag:"第7课 · 战国时期", q:"战国时期，使秦国一跃成为最强盛的诸侯国，为统一全国奠定基础的改革是？", opts:["管仲改革","商鞅变法","李悝变法","吴起变法"], a:1, explain:"商鞅变法使秦国的国力大为增强，提高了军队的战斗力，一跃成为最强盛的诸侯国，为以后秦统一全国奠定了基础。"},
+  {tag:"第7课 · 战国时期", q:"商鞅变法开始于哪一年？", opts:["公元前356年","公元前221年","公元前1046年","公元前770年"], a:0, explain:"公元前356年，秦孝公任用商鞅主持变法。"},
+  {tag:"第7课 · 战国时期", q:"商鞅变法中，有利于加强中央对地方控制的措施是？", opts:["废除井田制","奖励耕织","确立县制","奖励军功"], a:2, explain:"确立县制，由国君直接派官吏治理，加强了中央对地方的控制。"},
+  {tag:"第7课 · 战国时期", q:"战国时期，闻名世界的防洪灌溉工程是？", opts:["长城","都江堰","灵渠","大运河"], a:1, explain:"都江堰是战国时期秦国蜀郡郡守李冰主持修建的大型水利工程，至今仍在发挥作用。"},
+  {tag:"第7课 · 战国时期", q:"都江堰的主持修建者是？", opts:["商鞅","李冰","秦始皇","大禹"], a:1, explain:"都江堰是由秦国蜀郡郡守李冰主持修建的。"},
+
+  // 第8课 百家争鸣
+  {tag:"第8课 · 百家争鸣", q:"儒家学派的创始人是？", opts:["老子","孔子","墨子","韩非子"], a:1, explain:"孔子是儒家学派的创始人，他的思想后来由其弟子整理成《论语》一书。"},
+  {tag:"第8课 · 百家争鸣", q:"孔子的核心思想是？", opts:["“仁”","“无为而治”","“兼爱”“非攻”","“法治”"], a:0, explain:"孔子的核心思想是“仁”，他提出“仁者爱人”，即要有爱心和同情心。"},
+  {tag:"第8课 · 百家争鸣", q:"道家学派的创始人是？", opts:["孔子","老子","庄子","韩非子"], a:1, explain:"老子是道家学派的创始人，他的学说集中在《道德经》一书中。"},
+  {tag:"第8课 · 百家争鸣", q:"主张“无为而治”的思想家是？", opts:["孔子","老子","墨子","韩非子"], a:1, explain:"老子在政治上主张“无为而治”，人们与世无争，天下就能太平。"},
+  {tag:"第8课 · 百家争鸣", q:"墨家学派的创始人是？", opts:["墨子","孟子","荀子","庄子"], a:0, explain:"墨子是墨家学派的创始人，他主张“兼爱”“非攻”，提倡“尚贤”。"},
+  {tag:"第8课 · 百家争鸣", q:"主张“兼爱”“非攻”的思想家是？", opts:["孔子","老子","墨子","韩非子"], a:2, explain:"墨子主张“兼爱”“非攻”，要求人们互爱互利，反对各国相互攻伐兼并、残害生命。"},
+  {tag:"第8课 · 百家争鸣", q:"法家的集大成者是？", opts:["商鞅","李斯","韩非子","吴起"], a:2, explain:"韩非是法家的集大成者，他强调以法治国，树立君主的权威，建立中央集权专制统治。"},
+  {tag:"第8课 · 百家争鸣", q:"主张以法治国，建立中央集权专制统治的思想家是？", opts:["孔子","老子","墨子","韩非子"], a:3, explain:"韩非主张以法治国，建立中央集权专制统治，深受秦国国君的赏识。"},
+
+  // 第9课 秦统一中国
+  {tag:"第9课 · 秦统一中国", q:"我国历史上第一个统一的多民族的封建国家是？", opts:["夏朝","商朝","西周","秦朝"], a:3, explain:"公元前221年，秦国完成统一大业，建立秦朝，定都咸阳，这是我国历史上第一个统一的多民族的封建国家。"},
+  {tag:"第9课 · 秦统一中国", q:"秦朝建立的时间是？", opts:["公元前221年","公元前2070年","公元前1046年","公元前220年"], a:0, explain:"公元前221年，秦国完成统一大业，建立秦朝。"},
+  {tag:"第9课 · 秦统一中国", q:"秦朝的建立者是？", opts:["嬴政","嬴荡","扶苏","胡亥"], a:0, explain:"秦王嬴政即位后，连年发动对外战争，终于在公元前221年完成统一大业，建立秦朝。"},
+  {tag:"第9课 · 秦统一中国", q:"秦朝建立后，在地方上推行的制度是？", opts:["分封制","郡县制","行省制","科举制"], a:1, explain:"秦朝在地方上，进一步废除西周以来实行的分封制，建立由中央直接管辖的郡县制。"},
+  {tag:"第9课 · 秦统一中国", q:"秦朝统一后，全国通用的文字是？", opts:["甲骨文","金文","小篆","楷书"], a:2, explain:"秦始皇为消除文字上的差异，命丞相李斯等人统一文字，制定笔画规整的小篆，作为通用文字颁行全国。"},
+  {tag:"第9课 · 秦统一中国", q:"秦朝统一后，全国通用的货币是？", opts:["刀币","布币","圆形方孔半两钱","五铢钱"], a:2, explain:"秦始皇规定以秦国的圆形方孔半两钱作为标准货币，在全国流通。"},
+  {tag:"第9课 · 秦统一中国", q:"为了抵御匈奴，秦朝修筑的著名工程是？", opts:["都江堰","长城","灵渠","大运河"], a:1, explain:"秦始皇派大将蒙恬北击匈奴，并修筑西起临洮、东到辽东的“万里长城”。"},
+
+  // 第10课 秦末农民大起义
+  {tag:"第10课 · 秦末农民大起义", q:"中国历史上第一次农民大起义是？", opts:["黄巾起义","陈胜吴广起义","黄巢起义","李自成起义"], a:1, explain:"陈胜、吴广起义是中国历史上第一次农民大起义。"},
+  {tag:"第10课 · 秦末农民大起义", q:"陈胜吴广起义爆发的地点是？", opts:["大泽乡","咸阳","巨鹿","垓下"], a:0, explain:"公元前209年，陈胜、吴广在大泽乡起义，举起了反秦大旗。"},
+  {tag:"第10课 · 秦末农民大起义", q:"秦朝灭亡于哪一年？", opts:["公元前221年","公元前209年","公元前207年","公元前202年"], a:2, explain:"公元前207年，刘邦率军直抵秦都咸阳，秦朝统治者投降，秦朝灭亡。"},
+  {tag:"第10课 · 秦末农民大起义", q:"楚汉之争的获胜者是？", opts:["项羽","刘邦","陈胜","吴广"], a:1, explain:"秦朝灭亡后，项羽和刘邦为争夺帝位，展开了历时四年的楚汉之争，最终刘邦的军队把项羽包围在垓下，项羽自刎，刘邦获胜。"},
+
+  // 第11课 西汉建立和文景之治
+  {tag:"第11课 · 西汉建立和“文景之治”", q:"西汉的建立者是？", opts:["刘邦","刘彻","刘秀","刘备"], a:0, explain:"公元前202年，刘邦建立汉朝，定都长安，史称西汉，刘邦就是汉高祖。"},
+  {tag:"第11课 · 西汉建立和“文景之治”", q:"西汉建立的时间是？", opts:["公元前221年","公元前202年","公元25年","公元220年"], a:1, explain:"公元前202年，刘邦建立汉朝，定都长安，史称西汉。"},
+  {tag:"第11课 · 西汉建立和“文景之治”", q:"西汉初期，统治者推行的政策是？", opts:["重农抑商","休养生息","严刑峻法","穷兵黩武"], a:1, explain:"西汉初期，统治者吸取秦朝因暴政导致速亡的教训，推行休养生息政策。"},
+  {tag:"第11课 · 西汉建立和“文景之治”", q:"“文景之治”指的是哪两位皇帝统治时期的治世局面？", opts:["汉高祖和汉文帝","汉文帝和汉景帝","汉景帝和汉武帝","汉武帝和汉宣帝"], a:1, explain:"汉文帝和汉景帝时期，政治清明，经济发展，人民生活安定，历史上称这一时期的统治为“文景之治”。"},
+
+  // 第12课 汉武帝巩固大一统王朝
+  {tag:"第12课 · 汉武帝巩固大一统王朝", q:"汉武帝时期，接受谁的建议，“罢黜百家，独尊儒术”？", opts:["李斯","董仲舒","主父偃","卫青"], a:1, explain:"汉武帝接受董仲舒“罢黜百家，独尊儒术”的建议，把儒家学说立为正统思想。"},
+  {tag:"第12课 · 汉武帝巩固大一统王朝", q:"汉武帝为削弱诸侯王势力，采取的措施是？", opts:["分封制","推恩令","郡县制","科举制"], a:1, explain:"汉武帝采纳主父偃的“推恩”建议，下诏规定诸侯王除以嫡长子继承王位外，可将封地再次分封给其子弟作为侯国，由皇帝制定封号。"},
+  {tag:"第12课 · 汉武帝巩固大一统王朝", q:"汉武帝时期，统一铸造的货币是？", opts:["半两钱","五铢钱","刀币","布币"], a:1, explain:"汉武帝把铸币权收归中央，统一铸造五铢钱。"},
+  {tag:"第12课 · 汉武帝巩固大一统王朝", q:"汉武帝时期，率军北击匈奴的著名将领是？", opts:["卫青、霍去病","陈胜、吴广","项羽、刘邦","刘备、诸葛亮"], a:0, explain:"汉武帝派大将卫青、霍去病北击匈奴，使匈奴无力再与西汉对抗。"},
+
+  // 第13课 丝绸之路
+  {tag:"第13课 · 沟通中外文明的“丝绸之路”", q:"两次出使西域，为丝绸之路开通奠定基础的是？", opts:["张骞","班超","甘英","玄奘"], a:0, explain:"公元前138年和公元前119年，张骞两次出使西域，打通了汉朝通往西域的道路，为丝绸之路的开通奠定了基础。"},
+  {tag:"第13课 · 沟通中外文明的“丝绸之路”", q:"丝绸之路的起点是？", opts:["洛阳","长安","咸阳","敦煌"], a:1, explain:"丝绸之路从长安出发，穿过河西走廊，经西域运往中亚、西亚，再转运到更远的欧洲。"},
+  {tag:"第13课 · 沟通中外文明的“丝绸之路”", q:"东汉时期，出使西域，经营西域30多年的是？", opts:["张骞","班超","甘英","司马迁"], a:1, explain:"东汉明帝时，派班超出使西域，班超在西域经营30多年，为西域与汉朝的联系做出了重要贡献。"},
+
+  // 第14课 东汉的兴亡
+  {tag:"第14课 · 东汉的兴亡", q:"东汉的建立者是？", opts:["刘邦","刘彻","刘秀","刘备"], a:2, explain:"公元25年，刘秀称帝，定都洛阳，史称东汉，刘秀就是光武帝。"},
+  {tag:"第14课 · 东汉的兴亡", q:"东汉建立的时间是？", opts:["公元前202年","公元9年","公元25年","公元220年"], a:2, explain:"公元25年，刘秀称帝，定都洛阳，史称东汉。"},
+  {tag:"第14课 · 东汉的兴亡", q:"东汉时期，改进造纸术的是？", opts:["张衡","蔡伦","华佗","张仲景"], a:1, explain:"东汉时，宦官蔡伦总结前人经验，改进造纸工艺，用树皮、麻头、破布、旧渔网等植物纤维为原料造纸。"},
+
+  // 第15课 两汉的科技和文化
+  {tag:"第15课 · 两汉的科技和文化", q:"张仲景的医学著作是？", opts:["《伤寒杂病论》","《本草纲目》","《黄帝内经》","《千金方》"], a:0, explain:"张仲景是东汉末年的名医，他虚心向名医求教，四处奔走，广泛收集民间药方，在总结前人经验的基础上，结合自己的临床实践，写成了《伤寒杂病论》一书。"},
+  {tag:"第15课 · 两汉的科技和文化", q:"被后世称为“医圣”的是？", opts:["华佗","张仲景","李时珍","扁鹊"], a:1, explain:"张仲景是中医临床理论体系的开创者，为中医药学的发展作出巨大贡献，他医术精湛，医德高尚，被后世称为“医圣”。"},
+  {tag:"第15课 · 两汉的科技和文化", q:"发明了“麻沸散”的名医是？", opts:["张仲景","华佗","李时珍","孙思邈"], a:1, explain:"华佗是东汉末年的名医，他不仅擅长用针灸、汤药为人治病，而且能实施外科手术，他发明了“麻沸散”。"},
+  {tag:"第15课 · 两汉的科技和文化", q:"我国第一部纪传体通史是？", opts:["《春秋》","《史记》","《汉书》","《资治通鉴》"], a:1, explain:"《史记》是我国第一部纪传体通史，记述了从传说中的黄帝到汉武帝时约3000年的史事。"},
+  {tag:"第15课 · 两汉的科技和文化", q:"《史记》的作者是？", opts:["司马迁","司马光","班固","班超"], a:0, explain:"《史记》的作者是司马迁，他是我国古代伟大的史学家。"},
+
+  // 第16课 三国鼎立
+  {tag:"第16课 · 三国鼎立", q:"为三国鼎立局面形成奠定基础的战役是？", opts:["巨鹿之战","官渡之战","赤壁之战","淝水之战"], a:2, explain:"赤壁之战对当时整个局势有关键性的影响，为三国鼎立局面的形成奠定了基础。"},
+  {tag:"第16课 · 三国鼎立", q:"官渡之战中，曹操击败的是谁？", opts:["袁绍","刘备","孙权","董卓"], a:0, explain:"200年，曹操和袁绍在官渡进行决战，曹操偷袭袁军的屯粮，烧掉全部军粮，大败袁军。"},
+  {tag:"第16课 · 三国鼎立", q:"三国中，魏国的建立者是？", opts:["曹操","曹丕","曹植","司马懿"], a:1, explain:"220年，曹丕废掉汉献帝，在洛阳称帝，国号魏。"},
+  {tag:"第16课 · 三国鼎立", q:"三国中，蜀国的建立者是？", opts:["刘备","刘禅","刘邦","刘表"], a:0, explain:"221年，刘备在成都称帝，国号汉，史称蜀。"},
+  {tag:"第16课 · 三国鼎立", q:"三国中，吴国的建立者是？", opts:["孙策","孙权","孙坚","周瑜"], a:1, explain:"229年，孙权在建业称帝，国号吴。"},
+
+  // 第17课 西晋的短暂统一
+  {tag:"第17课 · 西晋的短暂统一", q:"西晋的建立者是？", opts:["司马懿","司马昭","司马炎","司马睿"], a:2, explain:"266年，司马炎自立为帝，改国号为晋，以洛阳为都，史称西晋。"},
+  {tag:"第17课 · 西晋的短暂统一", q:"西晋统一全国是在哪一年？", opts:["266年","280年","316年","317年"], a:1, explain:"280年，西晋灭吴，统一了全国。"},
+  {tag:"第17课 · 西晋的短暂统一", q:"西晋衰落的标志是？", opts:["七国之乱","八王之乱","黄巾起义","淝水之战"], a:1, explain:"西晋初期，晋惠帝在位时，手握重兵的八个封王为了争夺中央政权，先后起兵，相互混战，史称“八王之乱”，西晋从此衰落。"},
+
+  // 第18课 东晋南朝时期江南地区的开发
+  {tag:"第18课 · 东晋南朝时期江南地区的开发", q:"东晋的建立者是？", opts:["司马炎","司马睿","司马懿","司马昭"], a:1, explain:"317年，司马睿重建晋朝，以建康为都城，史称东晋。"},
+  {tag:"第18课 · 东晋南朝时期江南地区的开发", q:"东晋的都城是？", opts:["洛阳","长安","建康","北京"], a:2, explain:"东晋的都城是建康，也就是今天的南京。"},
+
+  // 第19课 北魏政治和北方民族大交融
+  {tag:"第19课 · 北魏政治和北方民族大交融", q:"北魏孝文帝改革的主要目的是？", opts:["抵御匈奴","学习汉族先进文化，加强统治","统一全国","发展经济"], a:1, explain:"北魏孝文帝即位后，立志用文治移风易俗，他力排众议，494年迁都洛阳，把百余万包括鲜卑族在内的北方各族人民迁到中原，进一步推行汉化措施。"},
+  {tag:"第19课 · 北魏政治和北方民族大交融", q:"北魏孝文帝把都城迁到了？", opts:["平城","洛阳","长安","建康"], a:1, explain:"494年，北魏孝文帝迁都洛阳。"},
+  {tag:"第19课 · 北魏政治和北方民族大交融", q:"北魏孝文帝改革的突出作用是？", opts:["促进了民族交融","加强了中央集权","抵御了外族入侵","发展了经济"], a:0, explain:"北魏孝文帝改革，促进了民族交融，也增强了北魏的实力。"},
+
+  // 第20课 魏晋南北朝的科技与文化
+  {tag:"第20课 · 魏晋南北朝的科技与文化", q:"世界上第一个把圆周率精确到小数点以后第七位的科学家是？", opts:["祖冲之","贾思勰","郦道元","王羲之"], a:0, explain:"祖冲之把圆周率精确到小数点以后的第七位数字，即3.1415926和3.1415927之间，这项成果领先世界近千年。"},
+  {tag:"第20课 · 魏晋南北朝的科技与文化", q:"我国现存最早的一部完整的农书是？", opts:["《齐民要术》","《农政全书》","《天工开物》","《本草纲目》"], a:0, explain:"《齐民要术》是我国现存最早的一部完整的农书，对后世农学的发展有深远的影响，在世界农学史上占有重要地位。"},
+  {tag:"第20课 · 魏晋南北朝的科技与文化", q:"《齐民要术》的作者是？", opts:["祖冲之","贾思勰","郦道元","王羲之"], a:1, explain:"《齐民要术》的作者是北朝的贾思勰。"},
+  {tag:"第20课 · 魏晋南北朝的科技与文化", q:"被后世称为“书圣”的是？", opts:["王羲之","王献之","颜真卿","柳公权"], a:0, explain:"王羲之的书法为古今之冠，笔势“飘若浮云，矫若惊龙”，他的代表作是《兰亭集序》，他被后人誉为“书圣”。"},
+  {tag:"第20课 · 魏晋南北朝的科技与文化", q:"王羲之的代表作是？", opts:["《兰亭集序》","《清明上河图》","《玄秘塔碑》","《史记》"], a:0, explain:"王羲之的代表作是《兰亭集序》，有“天下第一行书”的美誉。"},
+  {tag:"第20课 · 魏晋南北朝的科技与文化", q:"南北朝时期，开凿的著名石窟是？", opts:["莫高窟","云冈石窟和龙门石窟","麦积山石窟","大足石刻"], a:1, explain:"南北朝时期，统治阶级为宣扬佛教，在一些地方的山崖上，开凿了许多石窟，其中最著名的是山西大同的云冈石窟和河南洛阳的龙门石窟。"},
+];
+
+// 状态
+const QUESTION_TIME = 15;
+const TOTAL_Q = 10;
+let currentLesson = "";
+let currentQuestions = [];
+let qIndex = 0;
+let score = 0;
+let combo = 0;
+let lives = 3;
+let correctCount = 0;
+let timerInterval = null;
+let timeLeft = QUESTION_TIME;
+
+// 初始化：提取所有课
+function getLessons(){
+  const lessonSet = {};
+  POOL.forEach(q=>{
+    if(!lessonSet[q.tag]) lessonSet[q.tag] = 0;
+    lessonSet[q.tag]++;
+  });
+  return Object.entries(lessonSet).map(([name, count])=>({name, count}));
+}
+
+// 渲染课程列表
+function renderLessons(){
+  const lessons = getLessons();
+  const list = document.getElementById("lessonList");
+  list.innerHTML = "";
+  lessons.forEach((lesson, idx)=>{
+    const div = document.createElement("div");
+    div.className = "lesson-card";
+    div.innerHTML = `
+      <div class="lesson-num">${idx+1}</div>
+      <div class="lesson-info">
+        <div class="lesson-title">${lesson.name.split(" · ")[1]}</div>
+        <div class="lesson-meta">共${lesson.count}题 · 每次随机${Math.min(TOTAL_Q, lesson.count)}题</div>
+      </div>
+      <div class="lesson-arrow">→</div>
+    `;
+    div.onclick = ()=>startQuiz(lesson.name);
+    list.appendChild(div);
+  });
+}
+
+// 开始答题
+function startQuiz(lessonName){
+  currentLesson = lessonName;
+  const lessonQuestions = POOL.filter(q=>q.tag === lessonName);
+  currentQuestions = shuffle(lessonQuestions).slice(0, Math.min(TOTAL_Q, lessonQuestions.length));
+  qIndex = 0;
+  score = 0;
+  combo = 0;
+  lives = 3;
+  correctCount = 0;
+  document.getElementById("qTotal").innerText = currentQuestions.length;
+  document.getElementById("currentLesson").innerText = lessonName;
+  showQuestion();
+  switchPage("pageQuiz");
+}
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// 显示题目
+function showQuestion(){
+  stopTimer();
+  timeLeft = QUESTION_TIME;
+  updateTimer();
+  
+  const q = currentQuestions[qIndex];
+  document.getElementById("qNum").innerText = qIndex+1;
+  document.getElementById("lives").innerText = lives;
+  document.getElementById("combo").innerText = combo;
+  document.getElementById("score").innerText = score;
+  document.getElementById("questionText").innerText = (qIndex+1) + ". " + q.q;
+  
+  const optWrap = document.getElementById("options");
+  optWrap.innerHTML = "";
+  q.opts.forEach((op, idx)=>{
+    const div = document.createElement("div");
+    div.className = "option";
+    div.innerText = String.fromCharCode(65+idx) + ". " + op;
+    div.onclick = ()=>chooseAnswer(div, idx, q.a, q.explain);
+    optWrap.appendChild(div);
+  });
+  
+  document.getElementById("explainPanel").classList.remove("show");
+  startTimer();
+}
+
+function startTimer(){
+  stopTimer();
+  timeLeft = QUESTION_TIME;
+  updateTimer();
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimer();
+    if(timeLeft <= 0){
+      stopTimer();
+      timeUp();
     }
-    return a;
+  }, 1000);
+}
+
+function stopTimer(){
+  if(timerInterval){
+    clearInterval(timerInterval);
+    timerInterval = null;
   }
+}
 
-  function showScreen(id){
-    document.querySelectorAll('.screen').forEach(s => {
-      s.classList.toggle('active', s.id === id);
-    });
+function updateTimer(){
+  const bar = document.getElementById("timerFill");
+  const percent = (timeLeft / QUESTION_TIME) * 100;
+  bar.style.width = percent + "%";
+  if(timeLeft <= 5){
+    bar.classList.add("warning");
+  }else{
+    bar.classList.remove("warning");
   }
+}
 
-  /* ---------- 计时器 ---------- */
-  function startTimer(){
-    stopTimer();
-    G.t = DUR;
-    G.last = performance.now();
-    G.running = true;
-    updateTimeUI();
-    G.rafId = requestAnimationFrame(loop);
-  }
-
-  function stopTimer(){
-    G.running = false;
-    if(G.rafId) cancelAnimationFrame(G.rafId);
-    G.rafId = 0;
-  }
-
-  function loop(now){
-    if(!G.running) return;
-    const dt = Math.min(now - G.last, 260);
-    G.last = now;
-    if(!G.locked){
-      G.t -= dt;
-      if(G.t <= 0){
-        G.t = 0;
-        updateTimeUI();
-        onTimeout();
-        return;
-      }
-      updateTimeUI();
-    }
-    G.rafId = requestAnimationFrame(loop);
-  }
-
-  function updateTimeUI(){
-    const p = Math.max(0, G.t / DUR);
-    const fill = $('timeFill');
-    fill.style.width = (p * 100).toFixed(2) + '%';
-    fill.classList.toggle('low', p < 0.3);
-    $('pillTime').textContent = (G.t / 1000).toFixed(1) + 's';
-  }
-
-  /* ---------- HUD ---------- */
-  function updateHUD(){
-    $('statScore').textContent = G.score;
-    $('statCombo').textContent = '×' + G.combo;
-    const lv = $('statLives');
-    lv.innerHTML = '';
-    for(let i = 0; i < 3; i++){
-      const s = document.createElement('i');
-      if(i >= G.lives) s.className = 'off';
-      lv.appendChild(s);
-    }
-  }
-
-  function popScore(text, cls){
-    const el = document.createElement('div');
-    el.className = 'pop' + (cls ? ' ' + cls : '');
-    el.textContent = text;
-    $('scrPlay').appendChild(el);
-    setTimeout(() => el.remove(), 980);
-  }
-
-  /* ---------- 游戏流程 ---------- */
-  let currentUnit = 1;
-
-  function startGame(unit){
-    if(unit) currentUnit = unit;
-    
-    // 根据单元筛选题目
-    let unitPool = POOL;
-    if(currentUnit === 1){
-      unitPool = POOL.filter(q => q.tag.includes('第1课') || q.tag.includes('第2课') || q.tag.includes('第3课'));
-    } else if(currentUnit === 2){
-      unitPool = POOL.filter(q => q.tag.includes('第4课') || q.tag.includes('第5课') || q.tag.includes('第6课') || q.tag.includes('第7课') || q.tag.includes('第8课'));
-    } else if(currentUnit === 3){
-      unitPool = POOL.filter(q => q.tag.includes('第9课') || q.tag.includes('第10课') || q.tag.includes('第11课') || q.tag.includes('第12课') || q.tag.includes('第13课') || q.tag.includes('第14课') || q.tag.includes('第15课'));
-    } else if(currentUnit === 4){
-      unitPool = POOL.filter(q => q.tag.includes('第16课') || q.tag.includes('第17课') || q.tag.includes('第18课') || q.tag.includes('第19课') || q.tag.includes('第20课'));
-    }
-
-    G.deck = shuffle(unitPool).slice(0, TOTAL_Q);
-    G.i = 0;
-    G.score = 0;
-    G.combo = 0;
-    G.best = 0;
-    G.lives = 3;
-    G.answered = 0;
-    G.correct = 0;
-    G.locked = true;
-    $('topRight').textContent = 'UNIT 0' + currentUnit;
-    showScreen('scrPlay');
-    renderQuestion();
-  }
-
-  function renderQuestion(){
-    const q = G.deck[G.i];
-    G.locked = false;
-
-    $('qTag').textContent = q.tag;
-    $('qText').textContent = q.q;
-    $('pillIndex').innerHTML =
-      'Q <b>' + String(G.i + 1).padStart(2,'0') + '</b> / ' + String(G.deck.length).padStart(2,'0');
-
-    const optsEl = $('opts');
-    optsEl.innerHTML = '';
-    const L = ['A','B','C','D'];
-
-    q.opts.forEach((text, idx) => {
-      const b = document.createElement('button');
-      b.className = 'opt';
-      b.style.setProperty('--d', (idx * 70) + 'ms');
-      b.dataset.i = idx;
-      b.innerHTML = '<span class="key">' + L[idx] + '</span><span class="val"></span>';
-      b.querySelector('.val').textContent = text;
-      b.addEventListener('click', () => choose(idx));
-      optsEl.appendChild(b);
-    });
-
-    updateHUD();
-    startTimer();
-  }
-
-  function choose(idx){
-    if(G.locked) return;
-    G.locked = true;
-    stopTimer();
-
-    const q = G.deck[G.i];
-    const btns = Array.prototype.slice.call(document.querySelectorAll('.opt'));
-    btns.forEach(b => b.disabled = true);
-
-    G.answered++;
-
-    if(idx === q.a){
-      const gain = 100 + G.combo * 20;
-      G.score += gain;
-      G.combo++;
-      G.best = Math.max(G.best, G.combo);
-      G.correct++;
-      btns[idx].classList.add('correct');
-      popScore('+' + gain, 'good');
-    } else {
-      btns[idx].classList.add('wrong');
-      if(btns[q.a]) btns[q.a].classList.add('correct');
-      G.combo = 0;
-      G.lives--;
-      popScore('－1', 'bad');
-    }
-
-    updateHUD();
-    setTimeout(nextQuestion, idx === q.a ? 950 : 1450);
-  }
-
-  function onTimeout(){
-    if(G.locked) return;
-    G.locked = true;
-    stopTimer();
-
-    const q = G.deck[G.i];
-    const btns = Array.prototype.slice.call(document.querySelectorAll('.opt'));
-    btns.forEach(b => b.disabled = true);
-    if(btns[q.a]) btns[q.a].classList.add('correct');
-
-    G.answered++;
-    G.combo = 0;
-    G.lives--;
-
-    popScore('－1', 'bad');
-    updateHUD();
-    setTimeout(nextQuestion, 1450);
-  }
-
-  function nextQuestion(){
-    if(G.lives <= 0){ endGame('lives'); return; }
-    if(G.i >= G.deck.length - 1){ endGame('clear'); return; }
-    G.i++;
-    renderQuestion();
-  }
-
-  function endGame(reason){
-    stopTimer();
-    G.locked = true;
-    G.running = false;
-
-    const acc = G.answered ? Math.round(G.correct / G.answered * 100) : 0;
-
-    let rank = 'C', title = '继续加油', desc = '';
-    if(acc >= 90 && G.correct >= 10){
-      rank = 'S'; title = '史学天才';
-      desc = '几乎全对！从史前文明到秦汉三国，历史脉络你已经烂熟于心，不愧是历史小达人。';
-    } else if(acc >= 75){
-      rank = 'A'; title = '历史达人';
-      desc = '非常稳！再看一眼错题里的朝代事件和人物，满分就在眼前。';
-    } else if(acc >= 55){
-      rank = 'B'; title = '渐入佳境';
-      desc = '基础已经成型。重点复习：朝代顺序、重要事件和代表人物，多梳理时间线。';
-    } else {
-      rank = 'C'; title = '继续加油';
-      desc = '回到课本按时间顺序再过一遍，把重要朝代和事件对应起来，很多题都会变简单。';
-    }
-
-    if(reason === 'lives' && rank !== 'C'){
-      desc += '（生命耗尽，提前结束本局）';
-    }
-
-    $('endRank').textContent = rank;
-    $('endTitle').textContent = title;
-    $('endDesc').textContent = desc;
-    $('endScore').textContent = G.score;
-    $('endAcc').textContent = acc + '%';
-    $('endCombo').textContent = G.best;
-    $('endAnswered').textContent = G.correct + ' / ' + G.answered;
-    $('topRight').textContent = 'RESULT · ' + rank + ' RANK';
-
-    showScreen('scrEnd');
-  }
-
-  /* ---------- 键盘 ---------- */
-  window.addEventListener('keydown', e => {
-    const k = e.key.toLowerCase();
-    if(e.repeat) return;
-
-    if($('scrStart').classList.contains('active')){
-      // 单元选择页，不需要键盘开始
-      return;
-    }
-    if($('scrPlay').classList.contains('active')){
-      let idx = -1;
-      if('1234'.indexOf(k) >= 0) idx = parseInt(k, 10) - 1;
-      else if('abcd'.indexOf(k) >= 0) idx = 'abcd'.indexOf(k);
-      if(idx >= 0 && !G.locked){
-        e.preventDefault();
-        const btns = document.querySelectorAll('.opt');
-        if(btns[idx]) choose(idx);
-      }
-      return;
-    }
-    if($('scrEnd').classList.contains('active')){
-      if(k === 'enter' || k === ' '){ e.preventDefault(); showScreen('scrStart'); }
+function timeUp(){
+  lives--;
+  combo = 0;
+  const q = currentQuestions[qIndex];
+  const options = document.querySelectorAll(".option");
+  options.forEach(o=>{
+    o.classList.add("disabled");
+    const idx = String.fromCharCode(65) + ". ";
+    if(o.innerText.startsWith(String.fromCharCode(65+q.a) + ". ")){
+      o.classList.add("right");
     }
   });
+  audioWrong.currentTime = 0;
+  audioWrong.play();
+  speakText("时间到，答错了");
+  showExplain(q.explain);
+}
 
-  /* ---------- 按钮 ---------- */
-  document.querySelectorAll('.unit-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const unit = parseInt(card.dataset.unit);
-      startGame(unit);
+// 选择答案
+function chooseAnswer(el, idx, correctIdx, explain){
+  stopTimer();
+  const options = document.querySelectorAll(".option");
+  options.forEach(o=>o.classList.add("disabled"));
+  
+  if(idx === correctIdx){
+    el.classList.add("right");
+    combo++;
+    score += 10 + combo*2;
+    correctCount++;
+    audioCorrect.currentTime = 0;
+    audioCorrect.play();
+    speakText("答对了");
+  }else{
+    el.classList.add("wrong");
+    lives--;
+    combo = 0;
+    options.forEach(o=>{
+      const oIdx = o.innerText.charAt(0).charCodeAt(0) - 65;
+      if(oIdx === correctIdx) o.classList.add("right");
     });
-  });
-  $('btnRestart').addEventListener('click', () => showScreen('scrStart'));
+    audioWrong.currentTime = 0;
+    audioWrong.play();
+    speakText("答错了");
+  }
+  
+  showExplain(explain);
+}
 
-  /* ---------- 初始渲染 ---------- */
-  updateHUD();
+function showExplain(text){
+  document.getElementById("explainText").innerText = text;
+  document.getElementById("explainPanel").classList.add("show");
+}
 
-  /* ---------- 防复制功能 ---------- */
-  // 禁止右键菜单
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  
-  // 禁止文本选择
-  document.addEventListener('selectstart', e => e.preventDefault());
-  
-  // 禁止拖拽
-  document.addEventListener('dragstart', e => e.preventDefault());
-  
-  // 手机端禁止长按弹出菜单
-  document.addEventListener('touchstart', e => {
-    if(e.target.tagName === 'IMG') {
-      e.preventDefault();
-    }
-  }, {passive: false});
-})();
+function nextQuestion(){
+  qIndex++;
+  if(lives <= 0){
+    showResult();
+    return;
+  }
+  if(qIndex >= currentQuestions.length){
+    showResult();
+    return;
+  }
+  showQuestion();
+}
+
+function showResult(){
+  stopTimer();
+  let msg = "";
+  if(lives > 0 && correctCount === currentQuestions.length){
+    msg = "满分通关！历史小达人就是你！🎉";
+  }else if(correctCount >= currentQuestions.length * 0.8){
+    msg = "很不错！继续加油！👍";
+  }else if(correctCount >= currentQuestions.length * 0.6){
+    msg = "还可以，再复习一下错题！💪";
+  }else{
+    msg = "别灰心，回去再看看课本！📖";
+  }
+  document.getElementById("finalScore").innerText = score;
+  document.getElementById("resultMsg").innerHTML = `答对了 ${correctCount}/${currentQuestions.length} 题<br>${msg}`;
+  switchPage("pageResult");
+  speakText("挑战完成，得分" + score);
+}
+
+function retryQuiz(){
+  startQuiz(currentLesson);
+}
+
+function backToLessons(){
+  renderLessons();
+  switchPage("pageHome");
+}
+
+function switchPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+
+// 防复制
+document.addEventListener('contextmenu', e=>e.preventDefault());
+document.addEventListener('selectstart', e=>e.preventDefault());
+document.addEventListener('copy', e=>e.preventDefault());
+
+// 初始化
+renderLessons();
 </script>
 </body>
 </html>
-```
-### 玩法与交互反馈
-
-这个小游戏把数学知识点变成了限时闯关，上手很快。
-
-- **限时答题**：每道题15秒，倒计时条会逐渐缩短，时间到自动判错。
-- **得分与连击**：答对得基础100分，连续答对后每次加成分会递增，答错或超时连击重置。
-- **生命值**：共有3条命，答错或超时都会扣一条，扣完则提前结束。
-- **操作方式**：鼠标点击选项，或按数字键1-4/字母A-D作答，Enter键快速开始或重开。
-- **结算反馈**：结束后显示得分、正确率、最高连击，并给出S/A/B/C评级和针对性建议。
----
-
-**优化建议：** 您可以在代码开头的`POOL`数组里增删或修改题目和答案，每个题目的`a`属性是正确选项的索引（从0开始）。如果想调整难度，搜索`DUR = 15000`即可修改每道题的倒计时毫秒数。
